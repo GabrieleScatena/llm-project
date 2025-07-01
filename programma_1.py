@@ -14,8 +14,7 @@ def stampa_titolo(file1, file2):
     print('_' * len(titolo) + '\n\n')
 
 
-'''
-    def tokenizzazione(raw,sent_tokenizer):  # svolge sentence splitting e tokenizzazione restituisce tokens in totale e frasi tokenizzate
+def tokenizzazione(raw,sent_tokenizer):  # svolge sentence splitting e tokenizzazione restituisce tokens in totale e frasi tokenizzate
 
     frasi = sent_tokenizer.tokenize(raw)
 
@@ -28,7 +27,7 @@ def stampa_titolo(file1, file2):
         tokens_tot = tokens_tot + tokens  # concatena liste per avere i tokens in totale senza la suddivisione in frase
 
     return tokens_tot, frasi_tok
-'''
+
 def stampa_numero(oggetto, file1, file2, valore1, valore2): # stampa numero di caratteri / frasi
 
     print('NUMERO DI', oggetto.upper())
@@ -54,9 +53,6 @@ def main(file1, file2):
     raw2 = open_read(file2)
     # Utilizzo un tokenizzatore di frasi pre-addestrato
     sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
-
-    print(f"+++++++ ${sent_tokenizer}")
-    return
 
     tokens1, frasi_tok1 = tokenizzazione(raw1, sent_tokenizer)
     tokens2, frasi_tok2 = tokenizzazione(raw2, sent_tokenizer)
