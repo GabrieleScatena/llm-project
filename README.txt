@@ -1,4 +1,4 @@
-                      Linguis(ca Computazionale - Proge6o ﬁnale
+                      Linguistica Computazionale - Proge6o ﬁnale
                                    A.A. 2024-2025
 
 Obiettivo
@@ -20,7 +20,7 @@ linguisticamente almeno ﬁno al Part-of-Speech Tagging.
     • Se si sceglie di sviluppare il codice come un ﬁle Python, il programma deve prendere in input
         da riga di comando i ﬁle da analizzare.
     • Se si sceglie di sviluppare il codice come Notebook, è accettabile che il/i ﬁle sia/siano
-        speciﬁcati all’interno del codice utilizzando un path rela)vo.
+        speciﬁcati all’interno del codice utilizzando un path relativo.
 
 Programma 1
 Il codice sviluppato deve prendere in input i due corpora, eﬀeGuare le operazioni di annotazione
@@ -103,7 +103,7 @@ compressa:
 
    2. I due programmi/notebook BEN COMMENTATI
           • Nel caso si scelga di sviluppare programmi in Python (ﬁle .py), il risultato
-              dell’esecuzione deve essere scriGo in un ﬁle di testo (ben formaGato) e consegnato.
+              dell’esecuzione deve essere scriGo in un ﬁle di testo (ben formato) e consegnato.
               Quindi, dovranno essere consegnati tre ﬁle di output: uno per il primo programma, e
               due per il secondo.
           • Nel caso si scelga di sviluppare il codice aGraverso un Notebook, questo deve essere
