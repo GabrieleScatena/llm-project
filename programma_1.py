@@ -1,12 +1,26 @@
 import sys
 import nltk
 
+nltk.download('punkt_tab')
+
 def open_read(f):  # svolge le operazioni preliminari di apertura e lettura
     file_input = open(f, mode='r', encoding='utf-8')
     raw = file_input.read()
 
     return raw
 
+def media(valori):
+    somma = 0
+    for valore in valori: somma += valore
+    media = somma/len(valori)
+    return media
+
+def lunghezze(lista): # calcola la lunghezza di ogni frase / parola
+    lunghezze =  []
+    for elemento in lista:
+        lunghezza = len(elemento)
+        lunghezze.append(lunghezza)
+    return lunghezze
 
 def stampa_titolo(file1, file2):
     titolo = 'PROGRAMMA 1 - ANALISI LINGUISTICA DEI FILE: ' + str(file1) + ', ' + str(file2)
@@ -14,7 +28,28 @@ def stampa_titolo(file1, file2):
     print('_' * len(titolo) + '\n\n')
 
 
-def tokenizzazione(raw,sent_tokenizer):  # svolge sentence splitting e tokenizzazione restituisce tokens in totale e frasi tokenizzate
+def stampa_lunghezza_media(oggetto1, oggetto2, file1, file2, valore1, valore2): # stampa lunghezza media parole / frasi
+
+    print('LUNGHEZZA MEDIA', oggetto1.upper(), 'IN TERMINI DI', oggetto2.upper())
+    print()
+    print()
+    print('Lunghezza media', oggetto1, 'del file', file1, ':', valore1)
+    print('Lunghezza media', oggetto1, 'del file', file2, ':', valore2)
+    print()
+
+    if valore1>valore2:
+        print('Il file', file1, 'contiene', oggetto1, 'mediamente più lunghe')
+    elif valore2>valore1:
+        print('Il file', file2, 'contiene', oggetto1, 'mediamente più lunghe')
+    else:
+        print('I file', file1, 'e il file', file2, 'hanno la stessa lunghezza media di', oggetto1)
+
+    print()
+    print()
+    print()
+    print()
+
+def tokenizzazione(raw, sent_tokenizer):  # svolge sentence splitting e tokenizzazione restituisce tokens in totale e frasi tokenizzate
 
     frasi = sent_tokenizer.tokenize(raw)
 
@@ -61,6 +96,26 @@ def main(file1, file2):
     n_frasi1 = len(frasi_tok1)
     n_frasi2 = len(frasi_tok2)
     stampa_numero('frasi', file1, file2, n_frasi1, n_frasi2)
+
+    # numero tokens (1)
+    n_tokens1 = len(tokens1)
+    n_tokens2 = len(tokens2)
+    stampa_numero('token', file1, file2, n_tokens1, n_tokens2)
+
+    #lunghezza parole (2)
+    lunghezze_tokens1 = lunghezze(tokens1)
+    lunghezze_tokens2 = lunghezze(tokens2)
+    media_len_tokens1 = media(lunghezze_tokens1)
+    media_len_tokens2 = media(lunghezze_tokens2)
+    stampa_lunghezza_media('parole', 'caratteri', file1, file2, media_len_tokens1, media_len_tokens2)
+
+    # lunghezza frasi (2)
+    lunghezze_frasi1 = lunghezze(frasi_tok1)
+    lunghezze_frasi2 = lunghezze(frasi_tok2)
+    media_len_frasi1 = media(lunghezze_frasi1)
+    media_len_frasi2 = media(lunghezze_frasi2)
+    stampa_lunghezza_media('frasi', 'parole', file1, file2, media_len_frasi1, media_len_frasi2)
+
 
 if __name__ == "__main__":
 
