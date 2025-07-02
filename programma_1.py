@@ -1,161 +1,128 @@
 import sys
 import nltk
+import string
+from nltk.corpus import wordnet
+from nltk.stem import WordNetLemmatizer
 
 nltk.download('punkt_tab')
-
-def open_read(f):  # svolge le operazioni preliminari di apertura e lettura
-    file_input = open(f, mode='r', encoding='utf-8')
-    raw = file_input.read()
-
-    return raw
-
-def media(valori):
-    somma = 0
-    for valore in valori: somma += valore
-    media = somma/len(valori)
-    return media
-
-def lunghezze(lista): # calcola la lunghezza di ogni frase / parola
-    lunghezze =  []
-    for elemento in lista:
-        lunghezza = len(elemento)
-        lunghezze.append(lunghezza)
-    return lunghezze
-
-def stampa_titolo(file1, file2):
-    titolo = 'PROGRAMMA 1 - ANALISI LINGUISTICA DEI FILE: ' + str(file1) + ', ' + str(file2)
-    print(titolo)
-    print('_' * len(titolo) + '\n\n')
+nltk.download('averaged_perceptron_tagger_eng')
+nltk.download('wordnet')
 
 
-def stampa_lunghezza_media(oggetto1, oggetto2, file1, file2, valore1, valore2): # stampa lunghezza media parole / frasi
-
-    print('LUNGHEZZA MEDIA', oggetto1.upper(), 'IN TERMINI DI', oggetto2.upper())
-    print()
-    print('Lunghezza media', oggetto1, 'del file', file1, ':', valore1)
-    print('Lunghezza media', oggetto1, 'del file', file2, ':', valore2)
-    print()
-
-    if valore1>valore2:
-        print('Il file', file1, 'contiene', oggetto1, 'mediamente più lunghe')
-    elif valore2>valore1:
-        print('Il file', file2, 'contiene', oggetto1, 'mediamente più lunghe')
-    else:
-        print('I file', file1, 'e il file', file2, 'hanno la stessa lunghezza media di', oggetto1)
-
-    print()
-    print()
-
-def tokenizzazione(raw, sent_tokenizer):  # svolge sentence splitting e tokenizzazione restituisce tokens in totale e frasi tokenizzate
-    frasi = sent_tokenizer.tokenize(raw)
-
-    frasi_tok = []  # tokens divisi per frase
-    tokens_tot = []
-
-    for frase in frasi:
-        tokens = nltk.word_tokenize(frase)
-        frasi_tok.append(tokens)  # appende list con la frase tokenizzata
-        tokens_tot = tokens_tot + tokens  # concatena liste per avere i tokens in totale senza la suddivisione in frase
-
-    return tokens_tot, frasi_tok
-
-def stampa_numero(oggetto, file1, file2, valore1, valore2): # stampa numero di caratteri / frasi
-    print('NUMERO DI', oggetto.upper())
-    print()
-    print('Il file', file1, 'contiene', valore1, oggetto)
-    print('Il file', file2, 'contiene', valore2, oggetto)
-    print()
-
-    if valore1 > valore2: print('Il file', file1, 'contiene più', oggetto)
-    elif valore2 > valore1: print('Il file', file2, 'contiene più', oggetto)
-    else: print ('Il file', file1, 'e il file', file2, 'contengono lo stesso numero di', oggetto)
-    print()
-    print()
-
-def vocabolario(tokens, primi_tokens): # restituisce vocabolario, grandezza vocabolario e TTR, calcolata sui primi n tokens
-    voc = list(set(tokens[:primi_tokens]))
-    len_voc = len(voc)
-    ttr = len_voc/len(tokens)
-
-    return voc, len_voc, ttr
-
-def stampa_vocabolario(numero, file1, file2, len_voc1, len_voc2, ttr1,ttr2):  # stampa i dati relativi al vocabolario
-    print('VOCABOLARIO E TTR CALCOLATI SUI PRIMI', numero, 'TOKEN')
-    print()
-    print('Il vocabolario del file', file1, 'contiene', len_voc1, 'parole tipo')
-    print('Il vocabolario del file', file2, 'contiene', len_voc2, 'parole tipo')
-    print()
-
-    if (len_voc1 > len_voc2):
-        print('Il file', file1, 'ha un vocabolario più grande')
-    elif (len_voc2 > len_voc1):
-        print('Il file', file2, 'ha un vocabolario più grande')
-    else:
-        print('Il vocabolario del file', file1, 'e il vocabolario del file', file2,
-              'contengolo lo stesso numero di parole tipo')
-
-    print()
-    print('TTR del file', file1, ':', ttr1)
-    print('TTR del file', file2, ':', ttr2)
-    print()
-
-    if (ttr1 > ttr2):
-        print('Il file', file1, 'ha una TTR maggiore')
-    elif (ttr2 > ttr1):
-        print('Il file', file2, 'ha una TTR maggiore')
-    else:
-        print('Il file', file1, 'e il file', file2, 'hanno uguale TTR')
-
-    print()
-    print()
+def open_read(f): # svolge le operazioni preliminari di apertura e lettura
+    with open(f, mode='r', encoding='utf-8') as file_input:
+        return file_input.read()
 
 
-def main(file1, file2):
-
-    stampa_titolo(file1, file2)
-    raw1 = open_read(file1)
-    raw2 = open_read(file2)
-    # Utilizzo un tokenizzatore di frasi pre-addestrato
+def tokenizzazione(raw): # svolge sentence splitting e tokenizzazione restituisce tokens in totale e frasi tokenizzate
     sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
+    frasi = sent_tokenizer.tokenize(raw)
+    frasi_tok = [nltk.word_tokenize(frase) for frase in frasi]
+    tokens = [token for frase in frasi_tok for token in frase]
+    return tokens, frasi_tok
 
-    tokens1, frasi_tok1 = tokenizzazione(raw1, sent_tokenizer)
-    tokens2, frasi_tok2 = tokenizzazione(raw2, sent_tokenizer)
 
-    # numero frasi (1)
-    n_frasi1 = len(frasi_tok1)
-    n_frasi2 = len(frasi_tok2)
-    stampa_numero('frasi', file1, file2, n_frasi1, n_frasi2)
+def stampa_numero_frasi_token(frasi_tok, tokens, file): # Stampo il numero di frase ed il numero di Token (Con punteggiatura)
+    print(f'\nFILE: {file}')
+    print(f'Numero di frasi: {len(frasi_tok)}')
+    print(f'Numero di token (inclusa punteggiatura): {len(tokens)}')
 
-    # numero tokens (1)
-    n_tokens1 = len(tokens1)
-    n_tokens2 = len(tokens2)
-    stampa_numero('token', file1, file2, n_tokens1, n_tokens2)
 
-    #lunghezza token (2)
-    lunghezze_tokens1 = lunghezze(tokens1)
-    lunghezze_tokens2 = lunghezze(tokens2)
-    media_len_tokens1 = media(lunghezze_tokens1)
-    media_len_tokens2 = media(lunghezze_tokens2)
-    stampa_lunghezza_media('token', 'caratteri', file1, file2, media_len_tokens1, media_len_tokens2)
+def stampa_lunghezze_medie(frasi_tok, tokens, file): # Stampa la lunghezza media rimuovendo la punteggiatura
+    tokens_no_punt = rimuovi_punteggiatura(tokens)
+    media_token_len = sum(len(t) for t in tokens_no_punt) / len(tokens_no_punt)
+    media_frase_len = sum(len(frase) for frase in frasi_tok) / len(frasi_tok)
+    print(f'Lunghezza media dei token (escl. punteggiatura): {media_token_len:.2f} caratteri')
+    print(f'Lunghezza media delle frasi: {media_frase_len:.2f} token')
 
-    # lunghezza frasi (2)
-    lunghezze_frasi1 = lunghezze(frasi_tok1)
-    lunghezze_frasi2 = lunghezze(frasi_tok2)
-    media_len_frasi1 = media(lunghezze_frasi1)
-    media_len_frasi2 = media(lunghezze_frasi2)
-    stampa_lunghezza_media('frasi', 'token', file1, file2, media_len_frasi1, media_len_frasi2)
 
-    # vocabolario (3)
-    primi_tokens = 5000
-    voc1, len_voc1, ttr1 = vocabolario(tokens1, primi_tokens)
-    voc2, len_voc2, ttr2 = vocabolario(tokens2, primi_tokens)
-    stampa_vocabolario(primi_tokens, file1, file2, len_voc1, len_voc2, ttr1, ttr2)
+def rimuovi_punteggiatura(tokens):
+    return [t for t in tokens if t not in string.punctuation]
+
+
+def pos_distribution(tokens, file):
+    # Considero unicamente i primi 1000 caratteri
+    tokens_no_punt = rimuovi_punteggiatura(tokens[:1000])
+    pos_tags = nltk.pos_tag(tokens_no_punt)
+
+    # Dizionario per contare la frequenza di ciascun tag
+    tag_counts = {}
+    for word, tag in pos_tags:
+        if tag in tag_counts:
+            tag_counts[tag] += 1
+        else:
+            tag_counts[tag] = 1
+
+    # Stampa la distribuzione dei PoS
+    print(f'\nDistribuzione PoS (primi 1000 token) - {file}:')
+    for tag, count in tag_counts:
+        print(f'{tag}: {count}')
+
+
+def ttr_incrementale(tokens, file):
+    print(f'\nTTR incrementale (ogni 200 token) - {file}:')
+    for i in range(200, len(tokens)+1, 200):
+        segment = tokens[:i]
+        types = set(segment)
+        ttr = len(types) / len(segment)
+        print(f'Primi {i} token: TTR = {ttr:.4f}')
+
+
+def get_wordnet_pos(tag): # Resituisce la casistica del tag analizzato: Aggettivo, Verbo, nomi, avverbi
+    if tag.startswith('J'):
+        return wordnet.ADJ
+    elif tag.startswith('V'):
+        return wordnet.VERB
+    elif tag.startswith('N'):
+        return wordnet.NOUN
+    elif tag.startswith('R'):
+        return wordnet.ADV
+    else:
+        return wordnet.NOUN
+
+''' Prende in ingresso una lista di tokens, determina il suo POS, lemmatizza tramite il WordNetLemmatizer ed infine restituisce una lista di lemmi '''
+def lemmatizzazione(tokens):
+    # Inizializza il lemmatizzatore di WordNet (serve per ridurre le parole alla loro forma base o lemma)
+    lemmatizer = WordNetLemmatizer()
+    # Applica il POS tagging ai token, assegnando a ciascuna parola la sua categoria grammaticale (nome, verbo, ecc.)
+    pos_tags = nltk.pos_tag(tokens)
+    # Per ogni coppia (token, tag), ottiene il lemma usando il lemmatizzatore e la funzione get_wordnet_pos per mappare il tag in un formato compatibile con WordNet
+    lemmi = [lemmatizer.lemmatize(token, get_wordnet_pos(tag)) for token, tag in pos_tags]
+    return lemmi
+
+
+def stampa_vocabolario_lemmi(frasi_tok, tokens, file):
+    tokens_no_punct = rimuovi_punteggiatura(tokens)
+    lemmi = lemmatizzazione(tokens_no_punct)
+    vocabolario_lemmi = set(lemmi)
+
+    print(f'\nNumero di lemmi distinti - {file}: {len(vocabolario_lemmi)}')
+    num_lemmi_per_frase = [len(set(lemmatizzazione(rimuovi_punteggiatura(frase)))) for frase in frasi_tok]
+    media = sum(num_lemmi_per_frase) / len(num_lemmi_per_frase)
+    print(f'Numero medio di lemmi per frase: {media:.2f}')
+
+
+def main(file):
+    # Apro il file
+    raw = open_read(file)
+    # Eseguo la tokenizzazione, il sentence splitting e vado a restituire i token totali e le frasi tokenizzate
+    tokens, frasi_tok = tokenizzazione(raw)
+
+    # Stampo il numero di frasi e di token (Con punteggiatura)
+    stampa_numero_frasi_token(frasi_tok, tokens, file)
+
+    # Stampo la lunghezza media di frasi e di tokens (rimuovendo la punteggiatura)
+    stampa_lunghezze_medie(frasi_tok, tokens, file)
+
+
+    pos_distribution(tokens, file)
+    ttr_incrementale(tokens, file)
+    stampa_vocabolario_lemmi(frasi_tok, tokens, file)
 
 if __name__ == "__main__":
-
-    print(f"${sys.argv}")
     if len(sys.argv) != 3:
-        print("Usage: python3 programma_1.py <file1.txt> <file2.txt>")
+        print("Usage: python3 programma_1_OLD.py <file1.txt> <file2.txt>")
         sys.exit(1)
 
-    main(sys.argv[1], sys.argv[2])
+    main(sys.argv[1])
+    main(sys.argv[2])
