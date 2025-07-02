@@ -40,10 +40,10 @@ def rimuovi_punteggiatura(tokens):
     return [t for t in tokens if t not in string.punctuation]
 
 
-def pos_distribution(tokens, file):
+def pos_distribution(tokens, file):  # Restituisce la distribuzione PoS dei primi 1000 token (senza punteggiatura)
     # Considero unicamente i primi 1000 caratteri
     tokens_no_punt = rimuovi_punteggiatura(tokens[:1000])
-    pos_tags = nltk.pos_tag(tokens_no_punt)
+    pos_tags = nltk.pos_tag(tokens_no_punt) # Applica il PoS tagging: restituisce una lista di tuple (parola, PoS)
 
     # Dizionario per contare la frequenza di ciascun tag
     tag_counts = {}
@@ -53,13 +53,16 @@ def pos_distribution(tokens, file):
         else:
             tag_counts[tag] = 1
 
+    # Ordina i tag in base alla frequenza decrescente
+    sorted_tags = sorted(tag_counts.items(), key=lambda item: item[1], reverse=True)
+
     # Stampa la distribuzione dei PoS
     print(f'\nDistribuzione PoS (primi 1000 token) - {file}:')
-    for tag, count in tag_counts:
+    for tag, count in sorted_tags:
         print(f'{tag}: {count}')
 
 
-def ttr_incrementale(tokens, file):
+def ttr_incrementale(tokens, file): # Calcola e restituisce il TTR ogni 200 tokens
     print(f'\nTTR incrementale (ogni 200 token) - {file}:')
     for i in range(200, len(tokens)+1, 200):
         segment = tokens[:i]
@@ -80,23 +83,24 @@ def get_wordnet_pos(tag): # Resituisce la casistica del tag analizzato: Aggettiv
     else:
         return wordnet.NOUN
 
-''' Prende in ingresso una lista di tokens, determina il suo POS, lemmatizza tramite il WordNetLemmatizer ed infine restituisce una lista di lemmi '''
+''' Prende in ingresso una lista di tokens, determina il suo PoS, lemmatizza tramite il WordNetLemmatizer ed infine restituisce una lista di lemmi '''
 def lemmatizzazione(tokens):
     # Inizializza il lemmatizzatore di WordNet (serve per ridurre le parole alla loro forma base o lemma)
     lemmatizer = WordNetLemmatizer()
-    # Applica il POS tagging ai token, assegnando a ciascuna parola la sua categoria grammaticale (nome, verbo, ecc.)
+    # Applica il PoS tagging ai token, assegnando a ciascuna parola la sua categoria grammaticale (nome, verbo, ecc.)
     pos_tags = nltk.pos_tag(tokens)
     # Per ogni coppia (token, tag), ottiene il lemma usando il lemmatizzatore e la funzione get_wordnet_pos per mappare il tag in un formato compatibile con WordNet
     lemmi = [lemmatizer.lemmatize(token, get_wordnet_pos(tag)) for token, tag in pos_tags]
     return lemmi
 
-
+''' Rimuove la punteggiatura, esegue la lemmatizzazione dei tokens senza punteggiatura, ottengo gli elementi unici ed 
+    il numero di lemmi per frase con la quale calcolo la media di lemmi per frase'''
 def stampa_vocabolario_lemmi(frasi_tok, tokens, file):
     tokens_no_punct = rimuovi_punteggiatura(tokens)
     lemmi = lemmatizzazione(tokens_no_punct)
-    vocabolario_lemmi = set(lemmi)
-
+    vocabolario_lemmi = set(lemmi) # Ottengo gli elementi unici tramite la set
     print(f'\nNumero di lemmi distinti - {file}: {len(vocabolario_lemmi)}')
+
     num_lemmi_per_frase = [len(set(lemmatizzazione(rimuovi_punteggiatura(frase)))) for frase in frasi_tok]
     media = sum(num_lemmi_per_frase) / len(num_lemmi_per_frase)
     print(f'Numero medio di lemmi per frase: {media:.2f}')
@@ -114,9 +118,13 @@ def main(file):
     # Stampo la lunghezza media di frasi e di tokens (rimuovendo la punteggiatura)
     stampa_lunghezze_medie(frasi_tok, tokens, file)
 
-
+    # Restituisco la distribuzione PoS dei primi 1000 token (senza punteggiatura) con formato tag: conteggio
     pos_distribution(tokens, file)
+
+    # Calcolo e restituisco il TTR ogni 200 tokens
     ttr_incrementale(tokens, file)
+
+    # Stampa il numero di lemmi distinti ed il numero medio di lemmi per frase
     stampa_vocabolario_lemmi(frasi_tok, tokens, file)
 
 if __name__ == "__main__":
