@@ -32,7 +32,7 @@ def stampa_lunghezze_medie(frasi_tok, tokens, file): # Stampa la lunghezza media
     tokens_no_punt = rimuovi_punteggiatura(tokens)
     media_token_len = sum(len(t) for t in tokens_no_punt) / len(tokens_no_punt)
     media_frase_len = sum(len(frase) for frase in frasi_tok) / len(frasi_tok)
-    print(f'Lunghezza media dei token (escl. punteggiatura): {media_token_len:.2f} caratteri')
+    print(f'Lunghezza media dei token (escl. punteggiatura): {media_token_len:.2f} caratteri') #Mi fermo al secondo valore dopo la virgola, anche nel campo successivo
     print(f'Lunghezza media delle frasi: {media_frase_len:.2f} token')
 
 
@@ -68,7 +68,7 @@ def ttr_incrementale(tokens, file): # Calcola e restituisce il TTR ogni 200 toke
         segment = tokens[:i]
         types = set(segment)
         ttr = len(types) / len(segment)
-        print(f'Primi {i} token: TTR = {ttr:.4f}')
+        print(f'Primi {i} token: TTR = {ttr:.4f}') # Mi fermo al 4° valore dopo la virgola
 
 
 def get_wordnet_pos(tag): # Resituisce la casistica del tag analizzato: Aggettivo, Verbo, nomi, avverbi
@@ -103,7 +103,7 @@ def stampa_vocabolario_lemmi(frasi_tok, tokens, file):
 
     num_lemmi_per_frase = [len(set(lemmatizzazione(rimuovi_punteggiatura(frase)))) for frase in frasi_tok]
     media = sum(num_lemmi_per_frase) / len(num_lemmi_per_frase)
-    print(f'Numero medio di lemmi per frase: {media:.2f}')
+    print(f'Numero medio di lemmi per frase: {media:.2f}') # Mi fermo al secondo valore dopo la virgola
 
 
 def main(file):
