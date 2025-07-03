@@ -90,6 +90,7 @@ def get_wordnet_pos(tag): # Resituisce la casistica del tag analizzato: Aggettiv
     else:
         return wordnet.NOUN
 
+
 ''' Prende in ingresso una lista di tokens, determina il suo PoS, lemmatizza tramite il WordNetLemmatizer ed infine restituisce una lista di lemmi '''
 def lemmatizzazione(tokens):
     # Inizializza il lemmatizzatore di WordNet (serve per ridurre le parole alla loro forma base o lemma)
@@ -99,6 +100,7 @@ def lemmatizzazione(tokens):
     # Per ogni coppia (token, tag), ottiene il lemma usando il lemmatizzatore e la funzione get_wordnet_pos per mappare il tag in un formato compatibile con WordNet
     lemmi = [lemmatizer.lemmatize(token, get_wordnet_pos(tag)) for token, tag in pos_tags]
     return lemmi
+
 
 ''' Rimuove la punteggiatura, esegue la lemmatizzazione dei tokens senza punteggiatura, ottengo gli elementi unici ed 
     il numero di lemmi per frase con la quale calcolo la media di lemmi per frase'''
@@ -143,9 +145,9 @@ def analisi_sentiment(frasi_tok, file): # Effettua l'analisi del sentiment trami
 
 def main(file):
     # Apro il file
-    raw = open_read(file)
+    fileLetto = open_read(file)
     # Eseguo la tokenizzazione, il sentence splitting e vado a restituire i token totali e le frasi tokenizzate
-    tokens, frasi_tok = tokenizzazione(raw)
+    tokens, frasi_tok = tokenizzazione(fileLetto)
 
     ''' Cattura stdout
         buffer = io.StringIO()
@@ -182,7 +184,7 @@ def main(file):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python3 programma_1_OLD.py <file1.txt> <file2.txt>")
+        print("Usare: python3 programma_1_OLD.py <file1.txt> <file2.txt>")
         sys.exit(1)
 
     main(sys.argv[1])
