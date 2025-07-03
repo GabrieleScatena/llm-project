@@ -1,6 +1,5 @@
-+++++ <_io.StringIO object at 0x107345300>
-
 FILE: TrumpSpeech.txt
+
 Numero di frasi: 2157
 Numero di token (inclusa punteggiatura): 25106
 Lunghezza media dei token (escl. punteggiatura): 3.93 caratteri

@@ -10,7 +10,7 @@ def open_read(f): # svolge le operazioni preliminari di apertura e lettura
         return file_input.read()
 
 
-def write_line(out, text=""): # Svolge l'operazione di scrittura su di un file
+def write_line(out, text=""): # Svolge l'operazione di scrittura su di un file, ogni riga va a capo
     out.write(str(text) + '\n')
 
 
@@ -40,6 +40,7 @@ def get_top_ngrams(tokens, n, top_n=20):
     counter = Counter(ngrams)
     total = sum(counter.values())
     return [(ng, c, c / total) for ng, c in counter.most_common(top_n)]
+
 
 def get_top_pos_ngrams(pos_tags, n, top_n=20):
     tags = [tag for tag in pos_tags]

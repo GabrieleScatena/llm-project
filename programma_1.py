@@ -21,9 +21,9 @@ def scrivi_output(nomefile, contenuto): # Svolge la scrittura del risultato fina
     with open(nomefile, mode='w', encoding='utf-8') as f:
         f.write(contenuto)
 
-def tokenizzazione(raw): # svolge sentence splitting e tokenizzazione restituisce tokens in totale e frasi tokenizzate
-    sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
-    frasi = sent_tokenizer.tokenize(raw)
+def tokenizzazione(file): # svolge sentence splitting e tokenizzazione restituisce tokens in totale e frasi tokenizzate
+    tokenizzatore = nltk.data.load('tokenizers/punkt/english.pickle')
+    frasi = tokenizzatore.tokenize(file)
     frasi_tok = [nltk.word_tokenize(frase) for frase in frasi]
     tokens = [token for frase in frasi_tok for token in frase]
     return tokens, frasi_tok
@@ -184,7 +184,7 @@ def main(file):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usare: python3 programma_1_OLD.py <file1.txt> <file2.txt>")
+        print("Usare: python3 programma_1.py <file1.txt> <file2.txt>")
         sys.exit(1)
 
     main(sys.argv[1])
