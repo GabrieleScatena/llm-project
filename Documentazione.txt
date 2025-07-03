@@ -1,0 +1,40 @@
+Uso del classificatore:
+
+Per la classificazione della polarità delle frasi nei due corpora analizzati, è stato utilizzato il classificatore pre-addestrato VADER (Valence Aware Dictionary and sEntiment Reasoner),
+messo a disposizione dalla libreria nltk.
+VADER è un modello lessicale e rule-based progettato specificamente per l’analisi del sentiment su testi in lingua inglese.
+Si basa su un lessico che associa a ciascun lemma un punteggio di polarità (positivo, negativo, neutro), e include anche un insieme di regole grammaticali ed euristiche che tengono conto di:
+
+ - intensificatori e attenuatori,
+ - punteggiatura (es. punti esclamativi),
+ - uso di maiuscole,
+ - negazioni,
+ - emoticon e abbreviazioni comuni nel linguaggio informale.
+
+Il modello restituisce, per ciascuna frase, quattro punteggi:pos, neu, neg e compound, quest’ultimo essendo una stima complessiva normalizzata della polarità,
+su scala da -1 (estremamente negativo) a +1 (estremamente positivo).
+
+Nel presente lavoro, il testo è stato segmentato in frasi e VADER è stato applicato frase per frase, etichettandole come Positive, Negative o Neutre in base al valore del punteggio compound:
+
+compound ≥ 0.05 → POS
+compound ≤ -0.05 → NEG
+altrimenti → NEUTRO
+
+L’approccio è risultato efficace anche per documenti lunghi, in quanto la classificazione è avvenuta a livello di singola frase,
+rispettando l’ambito ottimale d’uso del modello.
+
+
+
+
+Prestazioni:
+
+VADER è un modello ampiamente validato nella letteratura NLP, in particolare per il dominio dei social media e delle recensioni.
+Secondo la documentazione ufficiale e test indipendenti, il classificatore raggiunge una precisione superiore all’80%, con punte massime superiori all’85% su dataset di riferimento come:
+ - Amazon reviews
+ - Yelp reviews
+ - IMDB reviews
+ - Twitter
+
+Le prestazioni sono particolarmente buone quando il testo è scritto in inglese standard o colloquiale.
+Nel contesto di questo progetto, la polarità complessiva del documento è stata stimata sommando i punteggi compound di ciascuna frase,
+ottenendo così un indicatore globale del tono del testo.

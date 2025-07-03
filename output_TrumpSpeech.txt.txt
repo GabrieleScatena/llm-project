@@ -1,0 +1,176 @@
++++++ <_io.StringIO object at 0x107345300>
+
+FILE: TrumpSpeech.txt
+Numero di frasi: 2157
+Numero di token (inclusa punteggiatura): 25106
+Lunghezza media dei token (escl. punteggiatura): 3.93 caratteri
+Lunghezza media delle frasi: 11.64 token
+
+Distribuzione PoS (primi 1000 token) - TrumpSpeech.txt:
+PRP: 107
+NN: 97
+DT: 84
+IN: 73
+NNP: 64
+RB: 46
+VB: 44
+JJ: 42
+VBP: 40
+VBZ: 39
+VBD: 33
+CC: 29
+VBG: 24
+TO: 22
+NNS: 16
+``: 14
+'': 14
+CD: 9
+MD: 9
+WRB: 8
+VBN: 5
+POS: 5
+RP: 4
+WP: 4
+RBS: 4
+JJS: 4
+WDT: 3
+PRP$: 2
+UH: 2
+JJR: 1
+NNPS: 1
+
+TTR incrementale (ogni 200 token) - TrumpSpeech.txt:
+Primi 200 token: TTR = 0.4600
+Primi 400 token: TTR = 0.4325
+Primi 600 token: TTR = 0.3717
+Primi 800 token: TTR = 0.3400
+Primi 1000 token: TTR = 0.3260
+Primi 1200 token: TTR = 0.2983
+Primi 1400 token: TTR = 0.2779
+Primi 1600 token: TTR = 0.2600
+Primi 1800 token: TTR = 0.2522
+Primi 2000 token: TTR = 0.2385
+Primi 2200 token: TTR = 0.2295
+Primi 2400 token: TTR = 0.2221
+Primi 2600 token: TTR = 0.2192
+Primi 2800 token: TTR = 0.2150
+Primi 3000 token: TTR = 0.2123
+Primi 3200 token: TTR = 0.2078
+Primi 3400 token: TTR = 0.2009
+Primi 3600 token: TTR = 0.1967
+Primi 3800 token: TTR = 0.1955
+Primi 4000 token: TTR = 0.1950
+Primi 4200 token: TTR = 0.1900
+Primi 4400 token: TTR = 0.1864
+Primi 4600 token: TTR = 0.1843
+Primi 4800 token: TTR = 0.1821
+Primi 5000 token: TTR = 0.1794
+Primi 5200 token: TTR = 0.1773
+Primi 5400 token: TTR = 0.1735
+Primi 5600 token: TTR = 0.1727
+Primi 5800 token: TTR = 0.1712
+Primi 6000 token: TTR = 0.1678
+Primi 6200 token: TTR = 0.1656
+Primi 6400 token: TTR = 0.1638
+Primi 6600 token: TTR = 0.1617
+Primi 6800 token: TTR = 0.1621
+Primi 7000 token: TTR = 0.1616
+Primi 7200 token: TTR = 0.1619
+Primi 7400 token: TTR = 0.1616
+Primi 7600 token: TTR = 0.1604
+Primi 7800 token: TTR = 0.1591
+Primi 8000 token: TTR = 0.1575
+Primi 8200 token: TTR = 0.1556
+Primi 8400 token: TTR = 0.1537
+Primi 8600 token: TTR = 0.1515
+Primi 8800 token: TTR = 0.1501
+Primi 9000 token: TTR = 0.1486
+Primi 9200 token: TTR = 0.1472
+Primi 9400 token: TTR = 0.1463
+Primi 9600 token: TTR = 0.1442
+Primi 9800 token: TTR = 0.1431
+Primi 10000 token: TTR = 0.1415
+Primi 10200 token: TTR = 0.1400
+Primi 10400 token: TTR = 0.1399
+Primi 10600 token: TTR = 0.1394
+Primi 10800 token: TTR = 0.1389
+Primi 11000 token: TTR = 0.1395
+Primi 11200 token: TTR = 0.1386
+Primi 11400 token: TTR = 0.1383
+Primi 11600 token: TTR = 0.1380
+Primi 11800 token: TTR = 0.1374
+Primi 12000 token: TTR = 0.1365
+Primi 12200 token: TTR = 0.1362
+Primi 12400 token: TTR = 0.1361
+Primi 12600 token: TTR = 0.1367
+Primi 12800 token: TTR = 0.1352
+Primi 13000 token: TTR = 0.1342
+Primi 13200 token: TTR = 0.1327
+Primi 13400 token: TTR = 0.1324
+Primi 13600 token: TTR = 0.1312
+Primi 13800 token: TTR = 0.1307
+Primi 14000 token: TTR = 0.1298
+Primi 14200 token: TTR = 0.1289
+Primi 14400 token: TTR = 0.1278
+Primi 14600 token: TTR = 0.1266
+Primi 14800 token: TTR = 0.1258
+Primi 15000 token: TTR = 0.1247
+Primi 15200 token: TTR = 0.1237
+Primi 15400 token: TTR = 0.1231
+Primi 15600 token: TTR = 0.1219
+Primi 15800 token: TTR = 0.1210
+Primi 16000 token: TTR = 0.1204
+Primi 16200 token: TTR = 0.1194
+Primi 16400 token: TTR = 0.1185
+Primi 16600 token: TTR = 0.1175
+Primi 16800 token: TTR = 0.1167
+Primi 17000 token: TTR = 0.1159
+Primi 17200 token: TTR = 0.1151
+Primi 17400 token: TTR = 0.1141
+Primi 17600 token: TTR = 0.1140
+Primi 17800 token: TTR = 0.1132
+Primi 18000 token: TTR = 0.1124
+Primi 18200 token: TTR = 0.1119
+Primi 18400 token: TTR = 0.1110
+Primi 18600 token: TTR = 0.1105
+Primi 18800 token: TTR = 0.1103
+Primi 19000 token: TTR = 0.1095
+Primi 19200 token: TTR = 0.1096
+Primi 19400 token: TTR = 0.1096
+Primi 19600 token: TTR = 0.1089
+Primi 19800 token: TTR = 0.1086
+Primi 20000 token: TTR = 0.1082
+Primi 20200 token: TTR = 0.1080
+Primi 20400 token: TTR = 0.1075
+Primi 20600 token: TTR = 0.1069
+Primi 20800 token: TTR = 0.1061
+Primi 21000 token: TTR = 0.1055
+Primi 21200 token: TTR = 0.1052
+Primi 21400 token: TTR = 0.1048
+Primi 21600 token: TTR = 0.1049
+Primi 21800 token: TTR = 0.1044
+Primi 22000 token: TTR = 0.1040
+Primi 22200 token: TTR = 0.1034
+Primi 22400 token: TTR = 0.1029
+Primi 22600 token: TTR = 0.1027
+Primi 22800 token: TTR = 0.1024
+Primi 23000 token: TTR = 0.1018
+Primi 23200 token: TTR = 0.1013
+Primi 23400 token: TTR = 0.1008
+Primi 23600 token: TTR = 0.1003
+Primi 23800 token: TTR = 0.0997
+Primi 24000 token: TTR = 0.0991
+Primi 24200 token: TTR = 0.0987
+Primi 24400 token: TTR = 0.0981
+Primi 24600 token: TTR = 0.0975
+Primi 24800 token: TTR = 0.0971
+Primi 25000 token: TTR = 0.0966
+
+Numero di lemmi distinti - TrumpSpeech.txt: 2077
+Numero medio di lemmi per frase: 9.03
+
+Distribuzione frasi POS/NEG/NEU - TrumpSpeech.txt:
+Positive: 721
+Negative: 419
+Neutre: 1017
+Polarità complessiva del documento: 161.3333

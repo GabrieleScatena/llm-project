@@ -1,0 +1,80 @@
++++++ <_io.StringIO object at 0x10723b940>
+
+FILE: RobertKennedySpeech.txt
+Numero di frasi: 331
+Numero di token (inclusa punteggiatura): 6484
+Lunghezza media dei token (escl. punteggiatura): 4.24 caratteri
+Lunghezza media delle frasi: 19.59 token
+
+Distribuzione PoS (primi 1000 token) - RobertKennedySpeech.txt:
+NN: 125
+IN: 117
+DT: 102
+PRP: 65
+JJ: 64
+NNP: 59
+VBP: 53
+CC: 45
+NNS: 44
+RB: 37
+VB: 31
+PRP$: 25
+VBD: 22
+VBZ: 19
+TO: 18
+VBN: 17
+VBG: 13
+MD: 10
+CD: 8
+WP: 7
+NNPS: 6
+JJS: 6
+EX: 5
+RBS: 2
+WDT: 2
+WRB: 1
+PDT: 1
+RP: 1
+
+TTR incrementale (ogni 200 token) - RobertKennedySpeech.txt:
+Primi 200 token: TTR = 0.5900
+Primi 400 token: TTR = 0.4875
+Primi 600 token: TTR = 0.4517
+Primi 800 token: TTR = 0.4275
+Primi 1000 token: TTR = 0.4110
+Primi 1200 token: TTR = 0.4050
+Primi 1400 token: TTR = 0.3986
+Primi 1600 token: TTR = 0.3906
+Primi 1800 token: TTR = 0.3728
+Primi 2000 token: TTR = 0.3630
+Primi 2200 token: TTR = 0.3591
+Primi 2400 token: TTR = 0.3483
+Primi 2600 token: TTR = 0.3408
+Primi 2800 token: TTR = 0.3325
+Primi 3000 token: TTR = 0.3227
+Primi 3200 token: TTR = 0.3156
+Primi 3400 token: TTR = 0.3079
+Primi 3600 token: TTR = 0.3006
+Primi 3800 token: TTR = 0.2961
+Primi 4000 token: TTR = 0.2898
+Primi 4200 token: TTR = 0.2852
+Primi 4400 token: TTR = 0.2807
+Primi 4600 token: TTR = 0.2743
+Primi 4800 token: TTR = 0.2704
+Primi 5000 token: TTR = 0.2660
+Primi 5200 token: TTR = 0.2602
+Primi 5400 token: TTR = 0.2541
+Primi 5600 token: TTR = 0.2498
+Primi 5800 token: TTR = 0.2448
+Primi 6000 token: TTR = 0.2410
+Primi 6200 token: TTR = 0.2379
+Primi 6400 token: TTR = 0.2341
+
+Numero di lemmi distinti - RobertKennedySpeech.txt: 1363
+Numero medio di lemmi per frase: 15.71
+
+Distribuzione frasi POS/NEG/NEU - RobertKennedySpeech.txt:
+Positive: 148
+Negative: 84
+Neutre: 99
+Polarità complessiva del documento: 28.5397

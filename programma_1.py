@@ -1,18 +1,25 @@
 import sys
 import nltk
 import string
+import io
+import os
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
+from nltk.sentiment import SentimentIntensityAnalyzer
 
 nltk.download('punkt_tab')
 nltk.download('averaged_perceptron_tagger_eng')
 nltk.download('wordnet')
+nltk.download('vader_lexicon')
 
 
 def open_read(f): # svolge le operazioni preliminari di apertura e lettura
     with open(f, mode='r', encoding='utf-8') as file_input:
         return file_input.read()
 
+def scrivi_output(nomefile, contenuto): # Svolge la scrittura del risultato finale del file
+    with open(nomefile, mode='w', encoding='utf-8') as f:
+        f.write(contenuto)
 
 def tokenizzazione(raw): # svolge sentence splitting e tokenizzazione restituisce tokens in totale e frasi tokenizzate
     sent_tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
@@ -106,6 +113,34 @@ def stampa_vocabolario_lemmi(frasi_tok, tokens, file):
     print(f'Numero medio di lemmi per frase: {media:.2f}') # Mi fermo al secondo valore dopo la virgola
 
 
+def analisi_sentiment(frasi_tok, file): # Effettua l'analisi del sentiment tramite VADER
+    sia = SentimentIntensityAnalyzer()
+    positive_contatore = 0
+    negative_contatore = 0
+    neutre_contatore = 0
+    polarita_documento = 0.0
+
+    for frase in frasi_tok:
+        frase_testo = ' '.join(frase)
+        risultato = sia.polarity_scores(frase_testo)
+        compound = risultato['compound']
+
+        if compound >= 0.05:
+            positive_contatore += 1
+        elif compound <= -0.05:
+            negative_contatore += 1
+        else:
+            neutre_contatore += 1
+
+        polarita_documento += compound
+
+    print(f"\nDistribuzione frasi POS/NEG/NEU - {file}:")
+    print(f"Positive: {positive_contatore}")
+    print(f"Negative: {negative_contatore}")
+    print(f"Neutre: {neutre_contatore}")
+    print(f"Polarità complessiva del documento: {polarita_documento:.4f}")
+
+
 def main(file):
     # Apro il file
     raw = open_read(file)
@@ -126,6 +161,10 @@ def main(file):
 
     # Stampa il numero di lemmi distinti ed il numero medio di lemmi per frase
     stampa_vocabolario_lemmi(frasi_tok, tokens, file)
+
+    # Effettua l'analisi sentiment rispetto alle frasi passate ed il file
+    analisi_sentiment(frasi_tok, file)
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
