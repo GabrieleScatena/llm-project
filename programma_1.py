@@ -147,6 +147,10 @@ def main(file):
     # Eseguo la tokenizzazione, il sentence splitting e vado a restituire i token totali e le frasi tokenizzate
     tokens, frasi_tok = tokenizzazione(raw)
 
+    ''' Cattura stdout
+        buffer = io.StringIO()
+        sys.stdout = buffer
+    '''
     # Stampo il numero di frasi e di token (Con punteggiatura)
     stampa_numero_frasi_token(frasi_tok, tokens, file)
 
@@ -164,6 +168,16 @@ def main(file):
 
     # Effettua l'analisi sentiment rispetto alle frasi passate ed il file
     analisi_sentiment(frasi_tok, file)
+
+
+    ''' Ripristina stdout e salva su file
+        sys.stdout = sys.__stdout__
+        contenuto = buffer.getvalue()
+        nome_output = f"output_{os.path.basename(file)}.txt"
+        scrivi_output(nome_output, contenuto)
+        # Stampa anche a terminale
+        # print(contenuto)
+    '''
 
 
 if __name__ == "__main__":
