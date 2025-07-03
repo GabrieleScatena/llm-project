@@ -1,10 +1,9 @@
 import sys
 import nltk
-import stanza
 from collections import Counter
 from math import log2
 
-nltk.download('punkt_tab')
+# nltk.download('punkt_tab')
 
 def open_read(f): # svolge le operazioni preliminari di apertura e lettura
     with open(f, mode='r', encoding='utf-8') as file_input:
@@ -15,7 +14,7 @@ def write_line(out, text=""): # Svolge l'operazione di scrittura su di un file
     out.write(str(text) + '\n')
 
 
-def tokenizerTag(text):
+def tokenizer_tag(text):
     sentences = nltk.sent_tokenize(text)
     tokens = []
     pos_tags = []
@@ -27,7 +26,7 @@ def tokenizerTag(text):
     return tokens, pos_tags
 
 
-def get_top_pos(pos_tags, allowed_prefixes, top_n=50):
+def ricava_top_pos(pos_tags, allowed_prefixes, top_n=50):
     counter = Counter()
     for word, tag in pos_tags:
         if any(tag.startswith(prefix) for prefix in allowed_prefixes):
@@ -102,14 +101,14 @@ def get_verb_noun_bigrams(pos_tags):
 
 def main(file):
     text = open_read(file)
-    tokens, pos_tags = tokenizerTag(text)
+    tokens, pos_tags = tokenizer_tag(text)
 
     ''' Creazione del file di output con relativo output '''
     with open("output_programma2.txt", "w", encoding="utf-8") as out:
 
         # 1. Top-50 Nouns, Adjectives, Adverbs
         write_line(out, "=== Top-50 NOUNs, ADJs, and ADVs ===")
-        for word, count, rel in get_top_pos(pos_tags, ['NN', 'JJ', 'RB'], 50):
+        for word, count, rel in ricava_top_pos(pos_tags, ['NN', 'JJ', 'RB'], 50):
             write_line(out, f"{word}\t{count}\t{rel:.4f}")
 
         # 2. Top-20 n-grams for n=1,2,3
