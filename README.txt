@@ -1,4 +1,4 @@
-                      Linguis(ca Computazionale - Proge6o ﬁnale
+                      Linguistica Computazionale - Progetto ﬁnale
                                    A.A. 2024-2025
 
 Obiettivo
@@ -20,20 +20,20 @@ linguisticamente almeno ﬁno al Part-of-Speech Tagging.
     • Se si sceglie di sviluppare il codice come un ﬁle Python, il programma deve prendere in input
         da riga di comando i ﬁle da analizzare.
     • Se si sceglie di sviluppare il codice come Notebook, è accettabile che il/i ﬁle sia/siano
-        speciﬁcati all’interno del codice utilizzando un path rela)vo.
+        speciﬁcati all’interno del codice utilizzando un path relativo.
 
 Programma 1
-Il codice sviluppato deve prendere in input i due corpora, eﬀeGuare le operazioni di annotazione
+Il codice sviluppato deve prendere in input i due corpora, eﬀettuare le operazioni di annotazione
 linguistica minime richieste (sentence spli.ng, tokenizzazione, PoS tagging) e la lemmatizzazione
-(utilizzando I PoS Tags), e produrre un confronto dei corpora rispeGo a:
+(utilizzando I PoS Tags), e produrre un confronto dei corpora rispetto a:
      1. Numero di frasi e token;
      2. Lunghezza media delle frasi in token e lunghezza media dei token, a eccezione della
-        punteggiatura, in caraGeri;
+        punteggiatura, in caratteri;
      3. Distribuzione delle PoS nei primi 1000 token
              • Confrontare la distribuzione delle categorie grammaticali nei primi 1000 token di
                 ciascun corpus;
      4. Dimensione del vocabolario e ricchezza lessicale (Type-Token Ratio, TTR), calcolata per
-        porzioni incrementali di 200 token ﬁno ad arrivare a tuGo il testo
+        porzioni incrementali di 200 token ﬁno ad arrivare a tutto il testo
              • i.e., i primi 200, i primi 400, i primi 600, ..., per tu. i token;
      5. Numero di lemmi disEnE (i.e., la dimensione del vocabolario dei lemmi)
      6. Numero medio di lemmi per frase.
@@ -44,7 +44,7 @@ linguistica minime richieste (sentence spli.ng, tokenizzazione, PoS tagging) e l
               essere descritio;
    8. Polarità del documento
           • Utilizzare il classiﬁcatore del punto 7. per determinare la polarità complessiva del
-              corpus, sommando la polarità di tuGe le frasi.
+              corpus, sommando la polarità di tutte le frasi.
 
 Programma 2
 Il codice sviluppato deve prendere in input un corpus, eﬀettuare le operazioni di annotazione
@@ -80,7 +80,7 @@ richieste (sentence spli.ng, tokenizzazione, PoS tagging), ed estrarre le seguen
               NB: la media della distribuzione di frequenza dei token è data dalla somma delle
               frequenze (nel corpus) dei token della frase diviso il numero di token della frase
 
-   6. Percentuale di Stopwords nel corpus rispeGo al totale dei token
+   6. Percentuale di Stopwords nel corpus rispetto al totale dei token
          import nltk
          from nltk.corpus import stopwords
 
@@ -97,31 +97,31 @@ richieste (sentence spli.ng, tokenizzazione, PoS tagging), ed estrarre le seguen
 
 
 Risulta: a;esi
-Perché il progeGo sia considerato idoneo, devono essere consegnaE all’interno di una cartella
+Perché il progetto sia considerato idoneo, devono essere consegnare all’interno di una cartella
 compressa:
    1. I due corpora, come ﬁle di testo
 
    2. I due programmi/notebook BEN COMMENTATI
           • Nel caso si scelga di sviluppare programmi in Python (ﬁle .py), il risultato
-              dell’esecuzione deve essere scriGo in un ﬁle di testo (ben formaGato) e consegnato.
+              dell’esecuzione deve essere scritto in un ﬁle di testo (ben formato) e consegnato.
               Quindi, dovranno essere consegnati tre ﬁle di output: uno per il primo programma, e
               due per il secondo.
-          • Nel caso si scelga di sviluppare il codice aGraverso un Notebook, questo deve essere
+          • Nel caso si scelga di sviluppare il codice attraverso un Notebook, questo deve essere
               consegnato eseguito. Per farlo, una volta eseguito il codice, è suﬃciente esportarlo
               in formato .ipynb dal menù a tendina. Dovranno essere consegnati quindi 3
               notebook: 1 per il primo programma, e 2 copie del notebook per il secondo
               programma, ciascuna eseguita su un corpus diverso.
 
-Il codice/notebook deve essere eseguibile (prestare aGenzione ai path assoluti) e replicare i risultati
+Il codice/notebook deve essere eseguibile (prestare attenzione ai path assoluti) e replicare i risultati
 consegnati.
-Il progeGo DEVE essere svolto INDIVIDUALMENTE
+Il progetto DEVE essere svolto INDIVIDUALMENTE
 
 Consegna
-La consegna del progeGo deve essere eﬀeGuata almeno una seTmana prima della data dell’esame
+La consegna del progetto deve essere eﬀettuata almeno una seTmana prima della data dell’esame
 ORALE dell’appello a cui volete partecipare.
-Il progeGo va consegnato via e-mail con le seguenti modalità:
-     • Allegato: cartella compressa contenente il codice del progeGo (cf. Risulta, A/esi)
-     • OggeWo: [ProgeGo LC 24-25] <Cognome Nome>
+Il progetto va consegnato via e-mail con le seguenti modalità:
+     • Allegato: cartella compressa contenente il codice del progetto (cf. Risulta, A/esi)
+     • OggeWo: [Progetto LC 24-25] <Cognome Nome>
      • DesEnatari:
            o alessandro.bondielli@unipi.it
            o alessandro.lenci@unipi.it
