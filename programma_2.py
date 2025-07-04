@@ -39,7 +39,7 @@ def tokenizzazione(file): # svolge sentence splitting e tokenizzazione restituis
     return tokens, frasi_tok
 
 
-def distinzione_wordnet_pos(tag): # Resituisce la casistica del tag analizzato: Aggettivo, Verbo, nomi, avverbi
+def distinzione_wordnet_pos(tag):  # Resituisce la casistica del tag analizzato: Aggettivo, Verbo, nomi, avverbi
     if tag.startswith('J'):
         return wordnet.ADJ
     elif tag.startswith('V'):
@@ -52,7 +52,9 @@ def distinzione_wordnet_pos(tag): # Resituisce la casistica del tag analizzato: 
         return wordnet.NOUN
 
 
-''' Prende in ingresso una lista di tokens, determina il PoS e lemmatizza tramite WordNetLemmatizer e la lemmatizzazione '''
+''' 
+    Prende in ingresso una lista di tokens, determina il PoS e lemmatizza tramite WordNetLemmatizer e la lemmatizzazione 
+'''
 def lemmatizzazione(tokens):
     lemmatizer = WordNetLemmatizer()
     pos_tags = nltk.pos_tag(tokens)
@@ -101,7 +103,6 @@ def estrai_top_ngrammi(tokens, n_range=(1, 2, 3), top_n=20):
         frequenze = Counter([' '.join(gramma) for gramma in ngrammi]) # utilizzo counter che va esattamente a contare le ricorrenze
         risultati[n] = frequenze.most_common(top_n) # Una funzione derivata dall'utilizzo della Counter, mi da le ricorrenze più comuni
     return risultati
-
 
 
 ''' Genera una stringa formattata con i top 20 n-grammi più frequenti.
@@ -223,6 +224,7 @@ def genera_output_bigrammi_vn(pos_tags):
     output += f"Comuni: {', '.join(intersezione)}\n"
 
     return output
+
 
 '''
     Vado a selezionare solo quelle frasi che hanno una lunghezza di parole che va da 10 a 20 
