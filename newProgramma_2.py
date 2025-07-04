@@ -1,3 +1,4 @@
+import os
 import sys
 import nltk
 import math
@@ -6,13 +7,19 @@ from nltk.util import ngrams
 from collections import Counter
 from nltk.corpus import wordnet
 from nltk.corpus import stopwords
+from collections import defaultdict
 from nltk.stem import WordNetLemmatizer
 
+'''
 nltk.download('punkt_tab')
 nltk.download('averaged_perceptron_tagger_eng')
 nltk.download('wordnet')
 nltk.download('maxent_ne_chunker')
 nltk.download('words')
+nltk.download('stopwords')
+nltk.download('maxent_ne_chunker_tab')
+'''
+
 
 def lettura_file(f): # svolge le operazioni preliminari di apertura e lettura
     with open(f, mode='r', encoding='utf-8') as file_input:
@@ -24,7 +31,7 @@ def scrittura_output(nomefile, contenuto): # Svolge la scrittura del risultato f
         f.write(contenuto)
 
 
-def tokenizzazione(file):
+def tokenizzazione(file): # svolge sentence splitting e tokenizzazione restituisce tokens in totale e frasi tokenizzate
     tokenizzatore = nltk.data.load('tokenizers/punkt/english.pickle')
     frasi = tokenizzatore.tokenize(file)
     frasi_tok = [nltk.word_tokenize(frase) for frase in frasi]
@@ -53,13 +60,19 @@ def lemmatizzazione(tokens):
     return pos_tags, lemmi
 
 
+''' Ricevendo i pos_tags, il tipo che si desidera e la cifra (50 per tutti e tre i casi nello specifico)
+    vado ad estrarmi le top parole per Nome, aggettivi ed avverbi
+'''
 def estrai_top_parole(pos_tags, tipi, top_n=50):
     parole_filtrate = [token.lower() for token, tag in pos_tags if tag.startswith(tipi)]
     frequenze = Counter(parole_filtrate) # utilizzo counter che va esattamente a contare le ricorrenze
     return frequenze.most_common(top_n)
 
 
-def genera_output_frequenze(pos_tags, top_n=50): # Estraggo le parole più frequenti
+''' Richiamo la funzione per l'estrazione delle parole passando i casi specifici e successivamente
+    vado a formare le frasi di output
+'''
+def genera_output_frequenze(pos_tags, top_n=50):
     top_sostantivi = estrai_top_parole(pos_tags, 'N', top_n)
     top_aggettivi = estrai_top_parole(pos_tags, 'J', top_n)
     top_avverbi = estrai_top_parole(pos_tags, 'R', top_n)
@@ -77,15 +90,24 @@ def genera_output_frequenze(pos_tags, top_n=50): # Estraggo le parole più frequ
     return output
 
 
+''' In maniera analoga all'estrazione delle top_parole, vado ad estrarre i top n-grammi.
+    Ho reso parametrica i parametri passabili ed impostato ad il default in base a quanto
+    richiesto dall'esercizio
+'''
 def estrai_top_ngrammi(tokens, n_range=(1, 2, 3), top_n=20):
     risultati = {}
     for n in n_range:
         ngrammi = ngrams(tokens, n)
-        frequenze = Counter([' '.join(gramma) for gramma in ngrammi])
-        risultati[n] = frequenze.most_common(top_n)
+        frequenze = Counter([' '.join(gramma) for gramma in ngrammi]) # utilizzo counter che va esattamente a contare le ricorrenze
+        risultati[n] = frequenze.most_common(top_n) # Una funzione derivata dall'utilizzo della Counter, mi da le ricorrenze più comuni
     return risultati
 
 
+
+''' Genera una stringa formattata con i top 20 n-grammi più frequenti.
+    Prende in input una lista di token e restituisce una rappresentazione testuale leggibile
+    dei risultati suddivisi per tipo di n-gramma. 
+'''
 def genera_output_ngrammi(tokens):
     ngrammi = estrai_top_ngrammi(tokens, n_range=[1, 2, 3], top_n=20)
     output = "\n\nTop 20 N-grammi:\n"
@@ -100,11 +122,12 @@ def genera_output_ngrammi(tokens):
 
 def estrai_top_ngrammi_pos(pos_tags, n_range=(1, 2, 3, 4, 5), top_n=20):
     risultati = {}
-    # Estrai solo la sequenza di PoS (es. ['DT', 'NN', 'VBZ'])
-    pos_sequence = [tag for _, tag in pos_tags]
+    # Estrae solo la sequenza di PoS
+    pos_sequence = [tag for tag in pos_tags]
 
     for n in n_range:
         ngrammi = ngrams(pos_sequence, n)
+        # utilizzo counter che va esattamente a contare le ricorrenze
         frequenze = Counter([' '.join(gramma) for gramma in ngrammi])
         risultati[n] = frequenze.most_common(top_n)
     return risultati
@@ -132,11 +155,12 @@ def estrai_bigrammi_VN(pos_tags):
 
 
 def calcola_metriche_bigrammi(bigrammi, pos_tags, top_n=10):
+    # utilizzo counter che va esattamente a contare le ricorrenze
     bigram_freq = Counter(bigrammi)
     tot_bigrammi = sum(bigram_freq.values())
 
-    # Frequenze singole
-    unigram_freq = Counter([word.lower() for word, _ in pos_tags])
+    # Frequenze unigrammi
+    unigram_freq = Counter([word.lower() for word in pos_tags])
 
     risultati = []
 
@@ -160,7 +184,7 @@ def calcola_metriche_bigrammi(bigrammi, pos_tags, top_n=10):
 
         risultati.append({
             'bigramma': f"{v} {n}",
-            'freq': f_vn,
+            'frequenza': f_vn,
             'p_cond': p_cond,
             'p_joint': p_joint,
             'mi': mi,
@@ -169,7 +193,7 @@ def calcola_metriche_bigrammi(bigrammi, pos_tags, top_n=10):
 
     # Ordinamenti
     ordinati = {
-        'frequenza': sorted(risultati, key=lambda x: x['freq'], reverse=True)[:top_n],
+        'frequenza': sorted(risultati, key=lambda x: x['frequenza'], reverse=True)[:top_n],
         'p_cond': sorted(risultati, key=lambda x: x['p_cond'], reverse=True)[:top_n],
         'p_joint': sorted(risultati, key=lambda x: x['p_joint'], reverse=True)[:top_n],
         'mi': sorted(risultati, key=lambda x: x['mi'], reverse=True)[:top_n],
@@ -200,7 +224,10 @@ def genera_output_bigrammi_vn(pos_tags):
 
     return output
 
-
+'''
+    Vado a selezionare solo quelle frasi che hanno una lunghezza di parole che va da 10 a 20 
+    (Comprese) e per cui i token occorrono almeno 2 volte nel corpus. 
+'''
 def filtra_frasi_valide(frasi_tok, tokens):
     token_freq = Counter(tokens)
     frasi_valide = []
@@ -320,7 +347,7 @@ def estrai_named_entities(pos_tags):
 
     for subtree in chunked:
         if hasattr(subtree, 'label'):
-            entity = " ".join([token for token, _ in subtree.leaves()])
+            entity = " ".join([token for token in subtree.leaves()])
             label = subtree.label()
             if label not in ne_freq:
                 ne_freq[label] = []
@@ -336,7 +363,7 @@ def calcola_frequenze_ne(ne_dict):
         conta = Counter(entita)
         totale = sum(conta.values())
         top_15 = conta.most_common(15)
-        frequenze[label] = [(ent, freq, (freq / totale) * 100) for ent, freq in top_15]
+        frequenze[label] = [(entita, freq, (freq / totale) * 100) for entita, freq in top_15]
 
     return frequenze
 
@@ -348,8 +375,8 @@ def genera_output_named_entities(pos_tags):
     output = "\n\nAnalisi Entità Nominate (Named Entities):\n"
     for label, entita_list in frequenze.items():
         output += f"\n-- Categoria: {label} --\n"
-        for ent, freq, perc in entita_list:
-            output += f"{ent}: {freq} ({perc:.2f}%)\n"
+        for entita, freq, perc in entita_list:
+            output += f"{entita}: {freq} ({perc:.2f}%)\n"
     return output
 
 
@@ -360,7 +387,7 @@ def main(file):
     pos_tags, lemmi = lemmatizzazione(tokens)
 
     # Prima richiesta, top 50 sostantivi, aggettivi, avverbi
-    output = genera_output_frequenze(pos_tags)
+    output = genera_output_frequenze(pos_tags, 50)
 
     # Seconda richiesta, top 20 n-grammi più frequenti
     output += genera_output_ngrammi(tokens)
@@ -376,14 +403,17 @@ def main(file):
     modello_markov = costruisci_modello_markov(tokens)
     output += genera_output_analisi_frasi(frasi_valide, token_freq, modello_markov)
 
-    # Sesta richiesta
+    # Sesta richiesta, percentuale Stopwords nel corpus
     output += genera_output_stopwords(tokens)
 
-    # Settiman richiesta
+    # Settiman richiesta, frequenza di uso dei pronomi personali
     output += genera_output_pronomi(pos_tags, frasi_tok)
 
-    # Ottava richiesta
+    # Ottava richiesta, estrae le entità nominate del testo
     output += genera_output_named_entities(pos_tags)
+
+    # Scrittura finale del file di risultato
+    scrittura_output(f'programma2_{os.path.basename(file)}', output)
 
 
 

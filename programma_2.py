@@ -108,7 +108,7 @@ def main(file):
     with open("output_programma2.txt", "w", encoding="utf-8") as out:
 
         # 1. Top-50 Nouns, Adjectives, Adverbs
-        write_line(out, "=== Top-50 NOUNs, ADJs, and ADVs ===")
+        write_line(out, "=== Top-50 Nomi, Aggettivi e avverbi ===")
         for word, count, rel in ricava_top_pos(pos_tags, ['NN', 'JJ', 'RB'], 50):
             write_line(out, f"{word}\t{count}\t{rel:.4f}")
 
@@ -122,7 +122,7 @@ def main(file):
         for n in [1, 2, 3, 4, 5]:
             write_line(out, f"\n=== Top-20 POS {n}-grams ===")
             for ng, count, rel in get_top_pos_ngrams(pos_tags, n):
-                write_line(out, f"{' '.join(ng)}\t{count}\t{rel:.4f}")
+                write_line(out, f"{' '.join(tag for (_, tag) in ng)}\t{count}\t{rel:.4f}")
 
         # 4. Bigrammi VERBO + SOSTANTIVO
         write_line(out, f"\n=== Top-10 Verb-Noun Bigrams ===")
