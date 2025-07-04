@@ -13,7 +13,7 @@ nltk.download('wordnet')
 nltk.download('vader_lexicon')
 
 
-def open_read(f): # svolge le operazioni preliminari di apertura e lettura
+def lettura_file(f): # svolge le operazioni preliminari di apertura e lettura
     with open(f, mode='r', encoding='utf-8') as file_input:
         return file_input.read()
 
@@ -78,7 +78,7 @@ def ttr_incrementale(tokens, file): # Calcola e restituisce il TTR ogni 200 toke
         print(f'Primi {i} token: TTR = {ttr:.4f}') # Mi fermo al 4° valore dopo la virgola
 
 
-def get_wordnet_pos(tag): # Resituisce la casistica del tag analizzato: Aggettivo, Verbo, nomi, avverbi
+def distinzione_wordnet_pos(tag): # Resituisce la casistica del tag analizzato: Aggettivo, Verbo, nomi, avverbi
     if tag.startswith('J'):
         return wordnet.ADJ
     elif tag.startswith('V'):
@@ -98,7 +98,7 @@ def lemmatizzazione(tokens):
     # Applica il PoS tagging ai token, assegnando a ciascuna parola la sua categoria grammaticale (nome, verbo, ecc.)
     pos_tags = nltk.pos_tag(tokens)
     # Per ogni coppia (token, tag), ottiene il lemma usando il lemmatizzatore e la funzione get_wordnet_pos per mappare il tag in un formato compatibile con WordNet
-    lemmi = [lemmatizer.lemmatize(token, get_wordnet_pos(tag)) for token, tag in pos_tags]
+    lemmi = [lemmatizer.lemmatize(token, distinzione_wordnet_pos(tag)) for token, tag in pos_tags]
     return lemmi
 
 
@@ -145,7 +145,7 @@ def analisi_sentiment(frasi_tok, file): # Effettua l'analisi del sentiment trami
 
 def main(file):
     # Apro il file
-    fileLetto = open_read(file)
+    fileLetto = lettura_file(file)
     # Eseguo la tokenizzazione, il sentence splitting e vado a restituire i token totali e le frasi tokenizzate
     tokens, frasi_tok = tokenizzazione(fileLetto)
 
