@@ -1,14 +1,18 @@
 import sys
 import nltk
 import math
+from nltk import ne_chunk
 from nltk.util import ngrams
 from collections import Counter
 from nltk.corpus import wordnet
+from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
 nltk.download('punkt_tab')
 nltk.download('averaged_perceptron_tagger_eng')
 nltk.download('wordnet')
+nltk.download('maxent_ne_chunker')
+nltk.download('words')
 
 def lettura_file(f): # svolge le operazioni preliminari di apertura e lettura
     with open(f, mode='r', encoding='utf-8') as file_input:
@@ -133,7 +137,6 @@ def calcola_metriche_bigrammi(bigrammi, pos_tags, top_n=10):
 
     # Frequenze singole
     unigram_freq = Counter([word.lower() for word, _ in pos_tags])
-    pos_dict = {word.lower(): tag for word, tag in pos_tags}
 
     risultati = []
 
@@ -198,6 +201,158 @@ def genera_output_bigrammi_vn(pos_tags):
     return output
 
 
+def filtra_frasi_valide(frasi_tok, tokens):
+    token_freq = Counter(tokens)
+    frasi_valide = []
+
+    for frase in frasi_tok:
+        if 10 <= len(frase) <= 20:
+            non_hapax = [t for t in frase if token_freq[t] >= 2]
+            if len(non_hapax) >= len(frase) // 2:
+                frasi_valide.append(frase)
+
+    return frasi_valide, token_freq
+
+
+def media_frequenza(frase, token_freq):
+    return sum(token_freq[token] for token in frase) / len(frase)
+
+
+def costruisci_modello_markov(tokens):
+    modello = defaultdict(Counter)
+    for i in range(len(tokens) - 2):
+        contesto = (tokens[i], tokens[i+1])
+        successivo = tokens[i+2]
+        modello[contesto][successivo] += 1
+    return modello
+
+
+def probabilita_markov(frase, modello):
+    prob = 1.0
+    for i in range(len(frase) - 2):
+        contesto = (frase[i], frase[i+1])
+        successivo = frase[i+2]
+        contatore = modello.get(contesto)
+        if not contatore or contatore[successivo] == 0:
+            prob *= 1e-6  # smoothing
+        else:
+            total = sum(contatore.values())
+            prob *= contatore[successivo] / total
+    return prob
+
+
+def analizza_frasi(frasi_valide, token_freq, modello):
+    if not frasi_valide:
+        return None, None, None
+
+    max_media = max(frasi_valide, key=lambda f: media_frequenza(f, token_freq))
+    min_media = min(frasi_valide, key=lambda f: media_frequenza(f, token_freq))
+    max_prob = max(frasi_valide, key=lambda f: probabilita_markov(f, modello))
+
+    return max_media, min_media, max_prob
+
+
+def genera_output_analisi_frasi(frasi_valide, token_freq, modello):
+    max_media, min_media, max_prob = analizza_frasi(frasi_valide, token_freq, modello)
+
+    output = "\n\nAnalisi Frasi con vincoli su lunghezza e hapax:\n"
+
+    if max_media:
+        output += f"\na. Frase con media di frequenza più alta:\n{' '.join(max_media)}\n"
+        output += f"    Media: {media_frequenza(max_media, token_freq):.2f}\n"
+
+    if min_media:
+        output += f"\nb. Frase con media di frequenza più bassa:\n{' '.join(min_media)}\n"
+        output += f"    Media: {media_frequenza(min_media, token_freq):.2f}\n"
+
+    if max_prob:
+        output += f"\nc. Frase con probabilità massima (Markov ordine 2):\n{' '.join(max_prob)}\n"
+        output += f"    Probabilità stimata: {probabilita_markov(max_prob, modello):.6e}\n"
+
+    return output
+
+
+def calcola_percentuale_stopwords(tokens):
+    stop_words = set(stopwords.words('english'))
+    num_stopwords = sum(1 for token in tokens if token.lower() in stop_words)
+    percentuale = (num_stopwords / len(tokens)) * 100 if tokens else 0
+    return percentuale, num_stopwords, len(tokens)
+
+
+def genera_output_stopwords(tokens):
+    percentuale, n_stopwords, n_tokens = calcola_percentuale_stopwords(tokens)
+    output = "\n\nAnalisi Stopwords:\n"
+    output += f"Numero totale token: {n_tokens}\n"
+    output += f"Numero stopwords: {n_stopwords}\n"
+    output += f"Percentuale stopwords: {percentuale:.2f}%\n"
+    return output
+
+
+def calcola_pronomi_personali(pos_tags, frasi_tok):
+    pronomi = [word for word, tag in pos_tags if tag in ('PRP', 'PRP$')]
+    num_pron = len(pronomi)
+    total_tokens = len(pos_tags)
+    percentuale = (num_pron / total_tokens) * 100 if total_tokens else 0
+
+    # Pronomi per frase
+    pronomi_per_frase = []
+    for frase in frasi_tok:
+        count = sum(1 for token, tag in nltk.pos_tag(frase) if tag in ('PRP', 'PRP$'))
+        pronomi_per_frase.append(count)
+    media_per_frase = sum(pronomi_per_frase) / len(pronomi_per_frase) if frasi_tok else 0
+
+    return num_pron, total_tokens, percentuale, media_per_frase
+
+
+def genera_output_pronomi(pos_tags, frasi_tok):
+    num_pron, total_tokens, perc, media = calcola_pronomi_personali(pos_tags, frasi_tok)
+    output = "\n\nAnalisi Pronomi Personali:\n"
+    output += f"Totale token: {total_tokens}\n"
+    output += f"Numero pronomi personali: {num_pron}\n"
+    output += f"Percentuale pronomi personali: {perc:.2f}%\n"
+    output += f"Media pronomi personali per frase: {media:.2f}\n"
+    return output
+
+
+def estrai_named_entities(pos_tags):
+    chunked = ne_chunk(pos_tags, binary=False)
+    ne_freq = {}
+
+    for subtree in chunked:
+        if hasattr(subtree, 'label'):
+            entity = " ".join([token for token, _ in subtree.leaves()])
+            label = subtree.label()
+            if label not in ne_freq:
+                ne_freq[label] = []
+            ne_freq[label].append(entity)
+
+    return ne_freq
+
+
+def calcola_frequenze_ne(ne_dict):
+    frequenze = {}
+
+    for label, entita in ne_dict.items():
+        conta = Counter(entita)
+        totale = sum(conta.values())
+        top_15 = conta.most_common(15)
+        frequenze[label] = [(ent, freq, (freq / totale) * 100) for ent, freq in top_15]
+
+    return frequenze
+
+
+def genera_output_named_entities(pos_tags):
+    ne_dict = estrai_named_entities(pos_tags)
+    frequenze = calcola_frequenze_ne(ne_dict)
+
+    output = "\n\nAnalisi Entità Nominate (Named Entities):\n"
+    for label, entita_list in frequenze.items():
+        output += f"\n-- Categoria: {label} --\n"
+        for ent, freq, perc in entita_list:
+            output += f"{ent}: {freq} ({perc:.2f}%)\n"
+    return output
+
+
 def main(file):
     fileLetto = lettura_file(file)
 
@@ -215,6 +370,20 @@ def main(file):
 
     # Quarta richiesta, top 10 bigrammi composti da verbo e sostantivo
     output += genera_output_bigrammi_vn(pos_tags)
+
+    # Quinta richiesta, Media di distribuzione
+    frasi_valide, token_freq = filtra_frasi_valide(frasi_tok, tokens)
+    modello_markov = costruisci_modello_markov(tokens)
+    output += genera_output_analisi_frasi(frasi_valide, token_freq, modello_markov)
+
+    # Sesta richiesta
+    output += genera_output_stopwords(tokens)
+
+    # Settiman richiesta
+    output += genera_output_pronomi(pos_tags, frasi_tok)
+
+    # Ottava richiesta
+    output += genera_output_named_entities(pos_tags)
 
 
 
