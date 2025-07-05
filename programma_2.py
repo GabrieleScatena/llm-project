@@ -11,6 +11,7 @@ from collections import defaultdict
 from nltk.stem import WordNetLemmatizer
 
 '''
+Decommentare questo codice in caso non siano stati già scaricati
 nltk.download('punkt_tab')
 nltk.download('averaged_perceptron_tagger_eng')
 nltk.download('wordnet')
@@ -182,54 +183,77 @@ def estrai_bigrammi_VN(pos_tags):
 
 
 def calcola_metriche_bigrammi(bigrammi, pos_tags, top_n=10):
-    # utilizzo counter che va esattamente a contare le ricorrenze
+    # Utilizzo counter che va esattamente a contare le ricorrenze
     bigram_freq = Counter(bigrammi)
+    # Mi ricavo la somme per avere il totale dei bigrammi
     tot_bigrammi = sum(bigram_freq.values())
 
-    # Frequenze unigrammi
+    # Frequenze unigrammi, calcolati tramite la Counter, funzione integrata di Collection
     unigram_freq = Counter([val.lower() for val, indice in pos_tags])
 
     risultati = []
 
+    '''
+    Il risultato di bigram_freq.items() è un elemento di questo tipo:
+    (('love', 'florida'), 1) --> Trami il ciclo flor vado a prendere di conseguenza
+    gli elementi delle tuple come verbo e nome e la relativa frequenza (f_vn)
+    '''
     for (v, n), f_vn in bigram_freq.items():
+        # Ricerco nella variabile le frequenze del verbo e del nome
         f_v = unigram_freq[v]
         f_n = unigram_freq[n]
 
-        # Prob condizionata
+        # Prob condizionata, equivalente a zero se la condizione f_v > 0 non è rispettata
         p_cond = f_vn / f_v if f_v > 0 else 0
 
-        # Prob congiunta
-        p_joint = f_vn / tot_bigrammi if tot_bigrammi > 0 else 0
+        # Prob congiunta, equivalente a zero se la condizione tot_bigrammi > 0 non è rispettata
+        p_v_n = f_vn / tot_bigrammi if tot_bigrammi > 0 else 0
 
-        # MI
+        # MI, vado a calcolarmi la Mutual Information con la relativa formula, sempre che
+        # p_v, p_n e p_v_n sia maggiore di 0
         p_v = f_v / tot_bigrammi
         p_n = f_n / tot_bigrammi
-        mi = math.log2(p_joint / (p_v * p_n)) if p_v > 0 and p_n > 0 and p_joint > 0 else 0
+        mi = math.log2(p_v_n / (p_v * p_n)) if p_v > 0 and p_n > 0 and p_v_n > 0 else 0
 
-        # LMI
+        # LMI ricavo Local Mutual Information
         lmi = f_vn * mi
 
+        ''' 
+        Invece di restituire più variabili, vado a crearmi un oggetto che viene inserito dentro
+        all'array dichiarata in precedenza 
+        '''
         risultati.append({
             'bigramma': f"{v} {n}",
             'frequenza': f_vn,
             'p_cond': p_cond,
-            'p_joint': p_joint,
+            'p_v_n': p_v_n,
             'mi': mi,
             'lmi': lmi
         })
 
-    # Ordinamenti
+    '''
+    Ordinamenti 
+    
+    Quello che vado a fare qui sono le seguenti cose:
+      - lambda: è una funzione anonima che riceve un elemento (cioè un dizionario della lista risultati) 
+        e restituisce il valore associato alla chiave ricevuta.
+      
+      - sorted: ordina la lista in base a un criterio specifico (il parametro key passato), 
+        in ordine decrescente perché è stato passato reverse=True
+        
+      - [:top_n] vuol dire che dopo averlo ordinato prendo fino all'elemento in 20° posizione
+    '''
     ordinati = {
         'frequenza': sorted(risultati, key=lambda x: x['frequenza'], reverse=True)[:top_n],
         'p_cond': sorted(risultati, key=lambda x: x['p_cond'], reverse=True)[:top_n],
-        'p_joint': sorted(risultati, key=lambda x: x['p_joint'], reverse=True)[:top_n],
+        'p_v_n': sorted(risultati, key=lambda x: x['p_v_n'], reverse=True)[:top_n],
         'mi': sorted(risultati, key=lambda x: x['mi'], reverse=True)[:top_n],
         'lmi': sorted(risultati, key=lambda x: x['lmi'], reverse=True)[:top_n],
     }
 
     # Intersezione
-    top_mi_set = set([r['bigramma'] for r in ordinati['mi']])
-    top_lmi_set = set([r['bigramma'] for r in ordinati['lmi']])
+    top_mi_set = set([elem['bigramma'] for elem in ordinati['mi']])
+    top_lmi_set = set([elem['bigramma'] for elem in ordinati['lmi']])
     intersezione = top_mi_set & top_lmi_set
 
     return ordinati, intersezione

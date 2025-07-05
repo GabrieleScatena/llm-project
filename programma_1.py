@@ -1,13 +1,13 @@
 import sys
 import nltk
 import string
-import io
 import os
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
 from nltk.sentiment import SentimentIntensityAnalyzer
 
 '''
+Decommentare questo codice in caso non siano stati già scaricati
 nltk.download('punkt_tab')
 nltk.download('averaged_perceptron_tagger_eng')
 nltk.download('wordnet')
