@@ -1,0 +1,499 @@
+Top 50 Sostantivi:
+people: 105
+country: 70
+joe: 59
+years: 57
+biden: 48
+%: 47
+way: 42
+president: 40
+america: 39
+lot: 33
+time: 32
+world: 31
+job: 29
+thing: 29
+thank: 28
+history: 28
+carolina: 28
+trump: 27
+vote: 27
+north: 27
+china: 26
+guy: 23
+deal: 22
+year: 22
+villages: 21
+covid: 21
+something: 20
+night: 20
+women: 20
+cases: 20
+florida: 19
+nation: 19
+nobody: 17
+sonny: 17
+please: 16
+numbers: 16
+months: 16
+everybody: 15
+days: 15
+state: 15
+anything: 15
+home: 15
+wall: 15
+times: 15
+life: 15
+hell: 15
+right: 15
+new: 14
+nothing: 14
+borders: 14
+
+Top 50 Aggettivi:
+great: 92
+good: 69
+american: 33
+little: 32
+last: 32
+more: 25
+many: 25
+other: 23
+bad: 22
+incredible: 19
+first: 18
+beautiful: 16
+greatest: 16
+big: 15
+same: 14
+crazy: 14
+half: 14
+right: 14
+true: 12
+second: 12
+proud: 12
+free: 11
+much: 11
+military: 11
+best: 10
+rid: 10
+happy: 10
+biggest: 10
+social: 10
+radical: 9
+horrible: 9
+immune: 9
+long: 9
+young: 8
+hard: 8
+fake: 8
+next: 8
+largest: 8
+powerful: 8
+new: 8
+suburban: 8
+important: 8
+foreign: 7
+only: 7
+strong: 7
+wrong: 7
+few: 7
+different: 7
+native: 7
+socialist: 6
+
+Top 50 Avverbi:
+n't: 227
+very: 91
+not: 88
+now: 62
+so: 62
+right: 60
+just: 59
+here: 57
+up: 50
+out: 50
+then: 45
+never: 40
+back: 39
+ever: 35
+really: 30
+down: 26
+always: 25
+even: 25
+there: 25
+again: 25
+ago: 23
+too: 22
+much: 21
+well: 21
+more: 16
+most: 15
+only: 15
+away: 12
+also: 10
+maybe: 9
+already: 9
+once: 9
+together: 9
+totally: 8
+off: 8
+first: 8
+far: 8
+close: 8
+actually: 7
+as: 7
+soon: 7
+else: 7
+okay: 6
+later: 6
+over: 6
+long: 5
+no: 5
+almost: 5
+badly: 5
+anymore: 5
+
+
+Top 20 N-grammi:
+
+--- 1-grammi ---
+.: 1910
+,: 1644
+the: 696
+I: 558
+to: 465
+a: 447
+'s: 422
+you: 412
+and: 401
+it: 378
+of: 316
+that: 298
+in: 246
+?: 246
+we: 233
+n't: 227
+'re: 210
+have: 204
+they: 200
+We: 196
+
+--- 2-grammi ---
+. I: 197
+. We: 167
+. And: 150
+, ``: 145
+. '': 124
+, and: 111
+. They: 109
+do n't: 102
+said ,: 100
+. You: 100
+. It: 95
+going to: 88
+, I: 85
+it .: 84
+, but: 82
+It 's: 76
+, you: 76
+. But: 73
+, we: 73
+I said: 69
+
+--- 3-grammi ---
+said , ``: 91
+. It 's: 66
+I said ,: 61
+. We 're: 47
+, right ?: 46
+I do n't: 42
+. That 's: 34
+'re going to: 33
+. And I: 29
+, it 's: 29
+. Thank you: 27
+. I said: 26
+. We have: 26
+a lot of: 25
+. '' I: 24
+. They 're: 23
+'' I said: 22
+. This is: 22
+do n't want: 22
+going to be: 22
+
+
+Top 20 N-grammi di PoS:
+
+--- 1-grammi di PoS ---
+PRP: 2841
+.: 2156
+NN: 2128
+DT: 1826
+IN: 1736
+,: 1644
+RB: 1432
+JJ: 1203
+NNP: 1178
+VBP: 1167
+VB: 1108
+VBD: 831
+NNS: 807
+CC: 785
+VBZ: 734
+VBG: 474
+TO: 472
+CD: 375
+MD: 365
+VBN: 316
+
+--- 2-grammi di PoS ---
+PRP VBP: 970
+. PRP: 840
+DT NN: 746
+NN .: 582
+PRP VBD: 563
+IN DT: 528
+NN ,: 464
+JJ NN: 432
+NN IN: 403
+DT JJ: 393
+, PRP: 381
+TO VB: 365
+PRP VBZ: 334
+CC PRP: 316
+IN PRP: 315
+PRP MD: 266
+RB .: 261
+NNP .: 249
+NNP NNP: 247
+MD VB: 247
+
+--- 3-grammi di PoS ---
+. PRP VBP: 367
+DT JJ NN: 251
+IN DT NN: 244
+NN . PRP: 215
+. PRP VBD: 198
+DT NN .: 196
+DT NN IN: 187
+PRP MD VB: 184
+PRP VBP RB: 176
+PRP VBP VBG: 159
+, PRP VBP: 159
+JJ NN .: 139
+. PRP VBZ: 136
+NN IN DT: 136
+. CC PRP: 128
+DT NN ,: 128
+CC PRP VBP: 127
+PRP VBP DT: 122
+JJ NN ,: 105
+PRP VBD ,: 103
+
+--- 4-grammi di PoS ---
+DT JJ NN .: 95
+NN . PRP VBP: 93
+PRP VBD , ``: 86
+PRP VBP RB VB: 84
+. PRP VBP RB: 79
+DT NN . PRP: 72
+NN IN DT NN: 71
+IN DT NN .: 65
+PRP MD RB VB: 65
+JJ NN . PRP: 64
+IN DT NN ,: 64
+. PRP MD VB: 61
+. PRP VBP VBG: 60
+DT NN IN DT: 58
+. CC PRP VBP: 57
+NN . PRP VBD: 55
+IN DT NN IN: 54
+IN DT JJ NN: 52
+. PRP VBP DT: 52
+VBP VBG TO VB: 51
+
+--- 5-grammi di PoS ---
+PRP VBP VBG TO VB: 48
+. PRP VBP RB VB: 46
+DT JJ NN . PRP: 42
+. PRP VBD , ``: 31
+. '' PRP VBD ,: 29
+'' PRP VBD , ``: 29
+JJ NN . PRP VBP: 28
+DT NN IN DT NN: 28
+PRP VBZ DT JJ NN: 25
+. PRP MD RB VB: 25
+NN IN DT NN IN: 25
+DT NN . PRP VBP: 24
+VBZ DT JJ NN .: 23
+NN . PRP VBP VBG: 23
+DT NN . PRP VBD: 23
+. PRP VBZ JJ .: 22
+. PRP VBP DT NN: 22
+IN DT NN . PRP: 22
+PRP VBD , `` PRP: 21
+PRP VBP DT NN IN: 21
+
+
+Top 10 Bigrammi Verbo + Sostantivo:
+
+--- Ordinati per FREQUENZA ---
+made america (frequenza: 12.0000)
+do deals (frequenza: 4.0000)
+make america (frequenza: 4.0000)
+play games (frequenza: 4.0000)
+'s something (frequenza: 3.0000)
+have borders (frequenza: 3.0000)
+be president (frequenza: 3.0000)
+come home (frequenza: 3.0000)
+'s nothing (frequenza: 3.0000)
+want voter (frequenza: 3.0000)
+
+--- Ordinati per P_COND ---
+blowing tonight (p_cond: 1.0000)
+blaming obama (p_cond: 1.0000)
+gained weight (p_cond: 1.0000)
+projected gdp (p_cond: 1.0000)
+cutting taxes (p_cond: 1.0000)
+quadrupling taxes (p_cond: 1.0000)
+decimate florida (p_cond: 1.0000)
+expose joe (p_cond: 1.0000)
+raiding medicare (p_cond: 1.0000)
+eliminate medicare (p_cond: 1.0000)
+
+--- Ordinati per P_JOINT ---
+made america (p_joint: 0.0368)
+do deals (p_joint: 0.0123)
+make america (p_joint: 0.0123)
+play games (p_joint: 0.0123)
+'s something (p_joint: 0.0092)
+have borders (p_joint: 0.0092)
+be president (p_joint: 0.0092)
+come home (p_joint: 0.0092)
+'s nothing (p_joint: 0.0092)
+want voter (p_joint: 0.0092)
+
+--- Ordinati per MI ---
+gained weight (mi: 8.3487)
+denying coverage (mi: 8.3487)
+soaring cost (mi: 8.3487)
+socialists gain (mi: 8.3487)
+bear arms (mi: 8.3487)
+leading space (mi: 8.3487)
+sell mar-a-lago (mi: 7.3487)
+manufacturing superpower (mi: 7.3487)
+guaranteed loss (mi: 7.3487)
+wing fascism (mi: 6.7638)
+
+--- Ordinati per LMI ---
+play games (lmi: 19.4275)
+made america (lmi: 16.8043)
+manufacturing superpower (lmi: 14.6975)
+returning power (lmi: 13.5275)
+defeated fascism (lmi: 12.3576)
+lose elections (lmi: 11.5275)
+having fun (lmi: 10.8837)
+passed va (lmi: 10.6975)
+ensure peace (lmi: 10.0536)
+cutting taxes (lmi: 9.7786)
+
+Numero di bigrammi comuni tra top-10 MI e LMI: 1
+Comuni: manufacturing superpower
+
+
+Analisi Frasi con vincoli su lunghezza e hapax:
+
+a. Frase con media di frequenza più alta:
+I thought , right , Kristen , I was surprised .
+    Media: 745.09
+
+b. Frase con media di frequenza più bassa:
+Is there anybody who has some sun protection for your President ?
+    Media: 55.58
+
+c. Frase con probabilità massima (Markov ordine 2):
+World 's most expensive outfits , 250,000 a piece .
+    Probabilità stimata: 5.000000e-01
+
+
+Analisi Stopwords:
+Numero totale token: 25106
+Numero stopwords: 10598
+Percentuale stopwords: 42.21%
+
+
+Analisi Pronomi Personali:
+Totale token: 25106
+Numero pronomi personali: 3131
+Percentuale pronomi personali: 12.47%
+Media pronomi personali per frase: 1.45
+
+
+Analisi Entità Nominate (Named Entities):
+
+-- Categoria: GPE --
+American: 40 (13.38%)
+America: 34 (11.37%)
+China: 26 (8.70%)
+North Carolina: 18 (6.02%)
+Florida: 17 (5.69%)
+United States: 9 (3.01%)
+Russia: 8 (2.68%)
+Pennsylvania: 7 (2.34%)
+Middle East: 6 (2.01%)
+Indian: 6 (2.01%)
+Ukraine: 5 (1.67%)
+Canada: 5 (1.67%)
+New York Times: 4 (1.34%)
+Washington: 4 (1.34%)
+U.S.: 4 (1.34%)
+
+-- Categoria: FACILITY --
+White House: 7 (58.33%)
+The Villages: 3 (25.00%)
+Air Force: 1 (8.33%)
+Air: 1 (8.33%)
+
+-- Categoria: ORGANIZATION --
+Medicare: 14 (11.11%)
+COVID: 12 (9.52%)
+Villages: 7 (5.56%)
+Democrats: 6 (4.76%)
+USA: 5 (3.97%)
+Native Americans: 5 (3.97%)
+GDP: 3 (2.38%)
+Republican: 3 (2.38%)
+CNN: 3 (2.38%)
+USMCA: 3 (2.38%)
+NAFTA: 3 (2.38%)
+VA: 3 (2.38%)
+Green New Deal: 2 (1.59%)
+RINOs: 2 (1.59%)
+Fed: 2 (1.59%)
+
+-- Categoria: PERSON --
+Joe: 28 (8.43%)
+Joe Biden: 23 (6.93%)
+Biden: 19 (5.72%)
+Sonny: 13 (3.92%)
+Trump: 12 (3.61%)
+Sleepy Joe: 7 (2.11%)
+Hunter: 6 (1.81%)
+Bernie: 6 (1.81%)
+Look: 5 (1.51%)
+John: 5 (1.51%)
+Obama: 5 (1.51%)
+Baron Trump: 5 (1.51%)
+North Carolina: 5 (1.51%)
+Nobody: 5 (1.51%)
+Beautiful: 4 (1.20%)
+
+-- Categoria: GSP --
+Kamala: 1 (16.67%)
+Florida: 1 (16.67%)
+Minneapolis: 1 (16.67%)
+Congressman: 1 (16.67%)
+US: 1 (16.67%)
+African: 1 (16.67%)

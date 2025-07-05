@@ -49,7 +49,7 @@ def distinzione_wordnet_pos(tag):  # Resituisce la casistica del tag analizzato:
     elif tag.startswith('R'):
         return wordnet.ADV
     else:
-        return wordnet.NOUN
+        return None
 
 
 ''' 
@@ -58,7 +58,16 @@ def distinzione_wordnet_pos(tag):  # Resituisce la casistica del tag analizzato:
 def lemmatizzazione(tokens):
     lemmatizer = WordNetLemmatizer()
     pos_tags = nltk.pos_tag(tokens)
-    lemmi = [lemmatizer.lemmatize(token, distinzione_wordnet_pos(tag)) for token, tag in pos_tags]
+    # lemmi = [lemmatizer.lemmatize(token, distinzione_wordnet_pos(tag)) for token, tag in pos_tags]
+    lemmi = []
+
+    for token, tag in pos_tags:
+        pos = distinzione_wordnet_pos(tag)
+        if pos is not None:
+            lemma = lemmatizer.lemmatize(token, pos)
+            lemmi.append(lemma)
+        else:
+           continue # In questo modo, evito di inserire la punteggiatura
     return pos_tags, lemmi
 
 
@@ -79,7 +88,12 @@ def genera_output_frequenze(pos_tags, top_n=50):
     top_aggettivi = estrai_top_parole(pos_tags, 'J', top_n)
     top_avverbi = estrai_top_parole(pos_tags, 'R', top_n)
 
-    # Restituisco i risultati
+    '''
+        Restituisco i risultati
+        Le join funzionano nel seguente modo: formo delle liste di parole e frequenze, invece di
+        utilizzare un ciclo for, con una singola linea di codice, vado ad unirle tutte tra loro
+        e le divido con un "a capo"
+    '''
     output = "Top 50 Sostantivi:\n"
     output += '\n'.join([f"{parola}: {freq}" for parola, freq in top_sostantivi]) + '\n\n'
 
@@ -121,14 +135,21 @@ def genera_output_ngrammi(tokens):
     return output
 
 
+''' Dati i pos_tags, vado ad estrare i top n-grammi  '''
 def estrai_top_ngrammi_pos(pos_tags, n_range=(1, 2, 3, 4, 5), top_n=20):
     risultati = {}
     # Estrae solo la sequenza di PoS
-    pos_sequence = [tag for tag in pos_tags]
+    pos_sequence = [pos for word, pos in pos_tags]
 
     for n in n_range:
         ngrammi = ngrams(pos_sequence, n)
-        # utilizzo counter che va esattamente a contare le ricorrenze
+        ''' 
+        utilizzo counter che va esattamente a contare le ricorrenze. 
+        Tramite la join: Ho delle liste di n-grammi, invece di
+        utilizzare un ciclo for, con una singola linea di codice, vado ad unire tutte le parole
+        tra loro e le divido con una spaziatura
+        
+        '''
         frequenze = Counter([' '.join(gramma) for gramma in ngrammi])
         risultati[n] = frequenze.most_common(top_n)
     return risultati
@@ -148,10 +169,15 @@ def genera_output_ngrammi_pos(pos_tags):
 
 def estrai_bigrammi_VN(pos_tags):
     bigrammi_vn = []
+    '''
+    Tramite questo for (Che scorre fino al penultimo elemento), analizzo una parola con la coppia
+    token - postag ed la coppia successiva, in questo modo controllo se ho un verbo ed un nome
+    a seguirlo
+    '''
     for i in range(len(pos_tags) - 1):
-        (w1, t1), (w2, t2) = pos_tags[i], pos_tags[i+1]
-        if t1.startswith('V') and t2.startswith('N'):
-            bigrammi_vn.append((w1.lower(), w2.lower()))
+        (token1, postag1), (token2, postag2) = pos_tags[i], pos_tags[i+1]
+        if postag1.startswith('V') and postag2.startswith('N'):
+            bigrammi_vn.append((token1.lower(), token2.lower()))
     return bigrammi_vn
 
 
@@ -161,7 +187,7 @@ def calcola_metriche_bigrammi(bigrammi, pos_tags, top_n=10):
     tot_bigrammi = sum(bigram_freq.values())
 
     # Frequenze unigrammi
-    unigram_freq = Counter([word.lower() for word in pos_tags])
+    unigram_freq = Counter([val.lower() for val, indice in pos_tags])
 
     risultati = []
 
@@ -318,7 +344,7 @@ def genera_output_stopwords(tokens):
 
 
 def calcola_pronomi_personali(pos_tags, frasi_tok):
-    pronomi = [word for word, tag in pos_tags if tag in ('PRP', 'PRP$')]
+    pronomi = [val for val, tag in pos_tags if tag in ('PRP', 'PRP$')]
     num_pron = len(pronomi)
     total_tokens = len(pos_tags)
     percentuale = (num_pron / total_tokens) * 100 if total_tokens else 0
@@ -344,13 +370,21 @@ def genera_output_pronomi(pos_tags, frasi_tok):
 
 
 def estrai_named_entities(pos_tags):
-    chunked = ne_chunk(pos_tags, binary=False)
+    # Eseguo il Named Entity Recognition, tramite il binary a false mi va a fare una distinzione con etichette specifiche
+    chunk = ne_chunk(pos_tags, binary=False)
     ne_freq = {}
 
-    for subtree in chunked:
-        if hasattr(subtree, 'label'):
-            entity = " ".join([token for token in subtree.leaves()])
-            label = subtree.label()
+    for elemento in chunk:
+        # Dentro l'elemento label trovo l'entità individuata dal chunk
+        if hasattr(elemento, 'label'):
+            ''' 
+            Tramite leaver, essendo elemento un albero, ricevo una lista di tuple che mi indica
+            la parola ed il pos tag. Tramite la join, essendo gli elementi che potrebbero essere molteplici
+            per una singola entry dell'array, li vado ad unire insereno una spaziatura " " vuota tra di loro
+            '''
+            entity = " ".join([token for token, el in elemento.leaves()])
+
+            label = elemento.label()
             if label not in ne_freq:
                 ne_freq[label] = []
             ne_freq[label].append(entity)
