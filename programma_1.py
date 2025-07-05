@@ -7,17 +7,18 @@ from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
 from nltk.sentiment import SentimentIntensityAnalyzer
 
+'''
 nltk.download('punkt_tab')
 nltk.download('averaged_perceptron_tagger_eng')
 nltk.download('wordnet')
 nltk.download('vader_lexicon')
-
+'''
 
 def lettura_file(f): # svolge le operazioni preliminari di apertura e lettura
     with open(f, mode='r', encoding='utf-8') as file_input:
         return file_input.read()
 
-def scrivi_output(nomefile, contenuto): # Svolge la scrittura del risultato finale del file
+def scrittura_output(nomefile, contenuto): # Svolge la scrittura del risultato finale del file
     with open(nomefile, mode='w', encoding='utf-8') as f:
         f.write(contenuto)
 
@@ -30,18 +31,21 @@ def tokenizzazione(file): # svolge sentence splitting e tokenizzazione restituis
 
 
 def stampa_numero_frasi_token(frasi_tok, tokens, file): # Stampo il numero di frase ed il numero di Token (Con punteggiatura)
-    print(f'\nFILE: {file}')
-    print(f'Numero di frasi: {len(frasi_tok)}')
-    print(f'Numero di token (inclusa punteggiatura): {len(tokens)}')
+    output = f'\nFILE: {file}'
+    output += f'\n\nNumero di frasi: {len(frasi_tok)}'
+    output += f'\nNumero di token (inclusa punteggiatura): {len(tokens)}'
 
+    return output
 
 def stampa_lunghezze_medie(frasi_tok, tokens, file): # Stampa la lunghezza media rimuovendo la punteggiatura
     tokens_no_punt = rimuovi_punteggiatura(tokens)
     media_token_len = sum(len(t) for t in tokens_no_punt) / len(tokens_no_punt)
     media_frase_len = sum(len(frase) for frase in frasi_tok) / len(frasi_tok)
-    print(f'Lunghezza media dei token (escl. punteggiatura): {media_token_len:.2f} caratteri') #Mi fermo al secondo valore dopo la virgola, anche nel campo successivo
-    print(f'Lunghezza media delle frasi: {media_frase_len:.2f} token')
 
+    output = f'\nLunghezza media dei token (escl. punteggiatura): {media_token_len:.2f} caratteri' #Mi fermo al secondo valore dopo la virgola, anche nel campo successivo
+    output += f'\nLunghezza media delle frasi: {media_frase_len:.2f} token'
+
+    return output
 
 def rimuovi_punteggiatura(tokens):
     return [t for t in tokens if t not in string.punctuation]
@@ -64,19 +68,21 @@ def pos_distribution(tokens, file):  # Restituisce la distribuzione PoS dei prim
     sorted_tags = sorted(tag_counts.items(), key=lambda item: item[1], reverse=True)
 
     # Stampa la distribuzione dei PoS
-    print(f'\nDistribuzione PoS (primi 1000 token) - {file}:')
+    output = f'\n\nDistribuzione PoS (primi 1000 token) - {file}:'
     for tag, count in sorted_tags:
-        print(f'{tag}: {count}')
+        output += f'\n{tag}: {count}'
 
+    return output
 
 def ttr_incrementale(tokens, file): # Calcola e restituisce il TTR ogni 200 tokens
-    print(f'\nTTR incrementale (ogni 200 token) - {file}:')
+    output = f'\n\nTTR incrementale (ogni 200 token) - {file}:'
     for i in range(200, len(tokens)+1, 200):
         segment = tokens[:i]
         types = set(segment)
         ttr = len(types) / len(segment)
-        print(f'Primi {i} token: TTR = {ttr:.4f}') # Mi fermo al 4° valore dopo la virgola
+        output += f'\nPrimi {i} token: TTR = {ttr:.4f}' # Mi fermo al 4° valore dopo la virgola
 
+    return output
 
 def distinzione_wordnet_pos(tag): # Resituisce la casistica del tag analizzato: Aggettivo, Verbo, nomi, avverbi
     if tag.startswith('J'):
@@ -108,12 +114,14 @@ def stampa_vocabolario_lemmi(frasi_tok, tokens, file):
     tokens_no_punct = rimuovi_punteggiatura(tokens)
     lemmi = lemmatizzazione(tokens_no_punct)
     vocabolario_lemmi = set(lemmi) # Ottengo gli elementi unici tramite la set
-    print(f'\nNumero di lemmi distinti - {file}: {len(vocabolario_lemmi)}')
+
+    output = f'\n\nNumero di lemmi distinti - {file}: {len(vocabolario_lemmi)}'
 
     num_lemmi_per_frase = [len(set(lemmatizzazione(rimuovi_punteggiatura(frase)))) for frase in frasi_tok]
     media = sum(num_lemmi_per_frase) / len(num_lemmi_per_frase)
-    print(f'Numero medio di lemmi per frase: {media:.2f}') # Mi fermo al secondo valore dopo la virgola
+    output += f'\nNumero medio di lemmi per frase: {media:.2f}' # Mi fermo al secondo valore dopo la virgola
 
+    return output
 
 def analisi_sentiment(frasi_tok, file): # Effettua l'analisi del sentiment tramite VADER
     sia = SentimentIntensityAnalyzer()
@@ -136,12 +144,13 @@ def analisi_sentiment(frasi_tok, file): # Effettua l'analisi del sentiment trami
 
         polarita_documento += compound
 
-    print(f"\nDistribuzione frasi POS/NEG/NEU - {file}:")
-    print(f"Positive: {positive_contatore}")
-    print(f"Negative: {negative_contatore}")
-    print(f"Neutre: {neutre_contatore}")
-    print(f"Polarità complessiva del documento: {polarita_documento:.4f}")
+    output = f"\n\nDistribuzione frasi POS/NEG/NEU - {file}:"
+    output += f"\nPositive: {positive_contatore}"
+    output += f"\nNegative: {negative_contatore}"
+    output += f"\nNeutre: {neutre_contatore}"
+    output += f"\nPolarità complessiva del documento: {polarita_documento:.4f}"
 
+    return output
 
 def main(file):
     # Apro il file
@@ -149,37 +158,25 @@ def main(file):
     # Eseguo la tokenizzazione, il sentence splitting e vado a restituire i token totali e le frasi tokenizzate
     tokens, frasi_tok = tokenizzazione(fileLetto)
 
-    ''' Cattura stdout
-        buffer = io.StringIO()
-        sys.stdout = buffer
-    '''
     # Stampo il numero di frasi e di token (Con punteggiatura)
-    stampa_numero_frasi_token(frasi_tok, tokens, file)
+    output = stampa_numero_frasi_token(frasi_tok, tokens, file)
 
     # Stampo la lunghezza media di frasi e di tokens (rimuovendo la punteggiatura)
-    stampa_lunghezze_medie(frasi_tok, tokens, file)
+    output += stampa_lunghezze_medie(frasi_tok, tokens, file)
 
     # Restituisco la distribuzione PoS dei primi 1000 token (senza punteggiatura) con formato tag: conteggio
-    pos_distribution(tokens, file)
+    output += pos_distribution(tokens, file)
 
     # Calcolo e restituisco il TTR ogni 200 tokens
-    ttr_incrementale(tokens, file)
+    output += ttr_incrementale(tokens, file)
 
     # Stampa il numero di lemmi distinti ed il numero medio di lemmi per frase
-    stampa_vocabolario_lemmi(frasi_tok, tokens, file)
+    output += stampa_vocabolario_lemmi(frasi_tok, tokens, file)
 
     # Effettua l'analisi sentiment rispetto alle frasi passate ed il file
-    analisi_sentiment(frasi_tok, file)
+    output += analisi_sentiment(frasi_tok, file)
 
-
-    ''' Ripristina stdout e salva su file
-        sys.stdout = sys.__stdout__
-        contenuto = buffer.getvalue()
-        nome_output = f"output_{os.path.basename(file)}.txt"
-        scrivi_output(nome_output, contenuto)
-        # Stampa anche a terminale
-        # print(contenuto)
-    '''
+    scrittura_output(f'programma1_{os.path.basename(file)}', output)
 
 
 if __name__ == "__main__":
