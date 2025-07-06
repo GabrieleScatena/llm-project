@@ -96,7 +96,7 @@ richieste (sentence spli.ng, tokenizzazione, PoS tagging), ed estrarre le seguen
 
 
 
-Risulta: a;esi
+Risultati attesi
 Perché il progetto sia considerato idoneo, devono essere consegnare all’interno di una cartella
 compressa:
    1. I due corpora, come ﬁle di testo
@@ -111,17 +111,3 @@ compressa:
               in formato .ipynb dal menù a tendina. Dovranno essere consegnati quindi 3
               notebook: 1 per il primo programma, e 2 copie del notebook per il secondo
               programma, ciascuna eseguita su un corpus diverso.
-
-Il codice/notebook deve essere eseguibile (prestare attenzione ai path assoluti) e replicare i risultati
-consegnati.
-Il progetto DEVE essere svolto INDIVIDUALMENTE
-
-Consegna
-La consegna del progetto deve essere eﬀettuata almeno una seTmana prima della data dell’esame
-ORALE dell’appello a cui volete partecipare.
-Il progetto va consegnato via e-mail con le seguenti modalità:
-     • Allegato: cartella compressa contenente il codice del progetto (cf. Risulta, A/esi)
-     • OggeWo: [Progetto LC 24-25] <Cognome Nome>
-     • DesEnatari:
-           o alessandro.bondielli@unipi.it
-           o alessandro.lenci@unipi.it
