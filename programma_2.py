@@ -235,7 +235,7 @@ def calcola_metriche_bigrammi(bigrammi, pos_tags, top_n=10):
     Ordinamenti 
     
     Quello che vado a fare qui sono le seguenti cose:
-      - lambda: è una funzione anonima che riceve un elemento (cioè un dizionario della lista risultati) 
+      - lambda: è una funzione anonima che riceve un elemento (In questo caso un dizionario della lista risultati) 
         e restituisce il valore associato alla chiave ricevuta.
       
       - sorted: ordina la lista in base a un criterio specifico (il parametro key passato), 
@@ -244,11 +244,11 @@ def calcola_metriche_bigrammi(bigrammi, pos_tags, top_n=10):
       - [:top_n] vuol dire che dopo averlo ordinato prendo fino all'elemento in 20° posizione
     '''
     ordinati = {
-        'frequenza': sorted(risultati, key=lambda x: x['frequenza'], reverse=True)[:top_n],
-        'p_cond': sorted(risultati, key=lambda x: x['p_cond'], reverse=True)[:top_n],
-        'p_v_n': sorted(risultati, key=lambda x: x['p_v_n'], reverse=True)[:top_n],
-        'mi': sorted(risultati, key=lambda x: x['mi'], reverse=True)[:top_n],
-        'lmi': sorted(risultati, key=lambda x: x['lmi'], reverse=True)[:top_n],
+        'frequenza': sorted(risultati, key=lambda el: el['frequenza'], reverse=True)[:top_n],
+        'p_cond': sorted(risultati, key=lambda el: el['p_cond'], reverse=True)[:top_n],
+        'p_v_n': sorted(risultati, key=lambda el: el['p_v_n'], reverse=True)[:top_n],
+        'mi': sorted(risultati, key=lambda el: el['mi'], reverse=True)[:top_n],
+        'lmi': sorted(risultati, key=lambda el: el['lmi'], reverse=True)[:top_n],
     }
 
     # Intersezione
@@ -298,6 +298,11 @@ def media_frequenza(frase, token_freq):
 
 
 def costruisci_modello_markov(tokens):
+    '''
+    Genero un dizionario con chiavi delle coppie (bigramma - occorrenze)
+    Scorro fino al terzultimo elemento (elaboro 2 parole ad ogni passo, altrimenti finirei fuori indice massimo
+    Tramite "modello[contesto][successivo]" tengo traccia di quante volte quella parola compare dopo il contesto analizzato
+    '''
     modello = defaultdict(Counter)
     for i in range(len(tokens) - 2):
         contesto = (tokens[i], tokens[i+1])
@@ -306,6 +311,11 @@ def costruisci_modello_markov(tokens):
     return modello
 
 
+'''
+Scorro i trigrammi della frase, prendo ogni coppia di parole e la successiva:
+Se quel contesto non è mai stato visto o non ha il successivo tra i suoi dati, applica smoothing: Moltiplico la probabilità per un valore piccolo, così da non azzerare il tutto.
+Altrimenti, calcolo la probabilità condizionata 
+'''
 def probabilita_markov(frase, modello):
     prob = 1.0
     for i in range(len(frase) - 2):
@@ -313,6 +323,7 @@ def probabilita_markov(frase, modello):
         successivo = frase[i+2]
         contatore = modello.get(contesto)
         if not contatore or contatore[successivo] == 0:
+            # Qualora non vi sia un caso successivo, moltiplico per un piccolo valore così da non azzerare il tutto
             prob *= 1e-6  # smoothing
         else:
             total = sum(contatore.values())
@@ -320,13 +331,18 @@ def probabilita_markov(frase, modello):
     return prob
 
 
+'''
+Qualora le frasi valide siano nulle, restituisco nullo per i tre valori (max_media, min_media, max_prob)
+Altrimenti, tramite una funzione anonima, vado a ricavarmi il valore massimo ed il minimo della frequenza media
+ed il valore massimo ottenuto dalla probabilità di markov
+'''
 def analizza_frasi(frasi_valide, token_freq, modello):
     if not frasi_valide:
         return None, None, None
 
-    max_media = max(frasi_valide, key=lambda f: media_frequenza(f, token_freq))
-    min_media = min(frasi_valide, key=lambda f: media_frequenza(f, token_freq))
-    max_prob = max(frasi_valide, key=lambda f: probabilita_markov(f, modello))
+    max_media = max(frasi_valide, key=lambda el: media_frequenza(el, token_freq))
+    min_media = min(frasi_valide, key=lambda el: media_frequenza(el, token_freq))
+    max_prob = max(frasi_valide, key=lambda el: probabilita_markov(el, modello))
 
     return max_media, min_media, max_prob
 
@@ -352,8 +368,11 @@ def genera_output_analisi_frasi(frasi_valide, token_freq, modello):
 
 
 def calcola_percentuale_stopwords(tokens):
+    # Ottengo l'elenco delle stopwords inglesi da NLTK, queste le inserisco in un dizionario così da poterle utilizzarle più velocemente
     stop_words = set(stopwords.words('english'))
+    # Conto quante parole tra i tokens sono stopwords
     num_stopwords = sum(1 for token in tokens if token.lower() in stop_words)
+    # Calcolo la percentuale di stopwords
     percentuale = (num_stopwords / len(tokens)) * 100 if tokens else 0
     return percentuale, num_stopwords, len(tokens)
 
@@ -367,13 +386,17 @@ def genera_output_stopwords(tokens):
     return output
 
 
+'''
+Vado a ricavarmi da subito tutti i pronomi (che rientrano nei tag PRP e PRP$). Mi vado a calcolare successivamente la percentuale
+di pronomi rispetto al numero totale dei tokens 
+'''
 def calcola_pronomi_personali(pos_tags, frasi_tok):
     pronomi = [val for val, tag in pos_tags if tag in ('PRP', 'PRP$')]
     num_pron = len(pronomi)
     total_tokens = len(pos_tags)
     percentuale = (num_pron / total_tokens) * 100 if total_tokens else 0
 
-    # Pronomi per frase
+    # Vado a calcolare il numero di pronomi interni ad ogni frase (PRP e PRP$), di conseguenza calcolo la media per frase
     pronomi_per_frase = []
     for frase in frasi_tok:
         count = sum(1 for token, tag in nltk.pos_tag(frase) if tag in ('PRP', 'PRP$'))
@@ -402,9 +425,9 @@ def estrai_named_entities(pos_tags):
         # Dentro l'elemento label trovo l'entità individuata dal chunk
         if hasattr(elemento, 'label'):
             ''' 
-            Tramite leaver, essendo elemento un albero, ricevo una lista di tuple che mi indica
+            Tramite leaves, essendo elemento un albero, ricevo una lista di tuple che mi indica
             la parola ed il pos tag. Tramite la join, essendo gli elementi che potrebbero essere molteplici
-            per una singola entry dell'array, li vado ad unire insereno una spaziatura " " vuota tra di loro
+            per una singola entry dell'array, li vado ad unire inserendo una spaziatura (" ") tra di loro
             '''
             entity = " ".join([token for token, el in elemento.leaves()])
 
@@ -420,9 +443,18 @@ def calcola_frequenze_ne(ne_dict):
     frequenze = {}
 
     for label, entita in ne_dict.items():
+        # Conto quante volte ogni entità è apparsa
         conta = Counter(entita)
+        # Calcolo quante entità totali ci sono in quella categoria
         totale = sum(conta.values())
+        # Ricavo i 15 più frequenti per quell'entità
         top_15 = conta.most_common(15)
+        '''
+        Assegno al dizionario frequenze[label] una lista di tuple con tre elementi per ciascuna delle top 15 entità:
+        1) entita → il nome dell’entità (es. "Google")
+        2) freq → quante volte è apparsa
+        3) (freq / totale) * 100 → la percentuale rispetto al totale di quella categoria
+        '''
         frequenze[label] = [(entita, freq, (freq / totale) * 100) for entita, freq in top_15]
 
     return frequenze
@@ -445,6 +477,11 @@ def main(file):
 
     tokens, frasi_tok = tokenizzazione(fileLetto)
     pos_tags, lemmi = lemmatizzazione(tokens)
+
+
+    ''' Tutte le funzioni genera_xxxx_xxx sono funzioni che vanno a generare un testo scritto con risultati,
+    al loro interno vengono chiamate altre funzioni di supporto che elaborano dati ed eseguono operazioni
+    '''
 
     # Prima richiesta, top 50 sostantivi, aggettivi, avverbi
     output = genera_output_frequenze(pos_tags, 50)
