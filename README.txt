@@ -1,26 +1,15 @@
-                      Linguistica Computazionale - Progetto ﬁnale
-                                   A.A. 2024-2025
-
-Obiettivo
-Realizzazione di due programmi scritti in Python o su Notebook (Jupyter, Colab, ...) che utilizzino i
-moduli di NLTK per analizzare linguisticamente due corpora di testo inglese, confrontarli sulla base
-di alcuni indici statistici, ed estrarre da essi informazioni.
+Realizzazione di due programmi scritti in Python che utilizzino i moduli di NLTK per analizzare linguisticamente due corpora di testo inglese, 
+confrontarli sulla base di alcuni indici statistici, ed estrarre da essi informazioni.
 
 Creazione dei corpora
 I due corpora devono essere creati rispondendo alle seguenti caratteristiche:
     1. Devono essere in lingua inglese
     2. Devono contenere almeno 5000 parole
-    3. Ciascuno deve essere rappresentativo di uno speciﬁco genere testuale (ad es. Testo
-        giornalistico, prosa letteraria, blog, social media, articoli scientiﬁci, ecc.)
+    3. Ciascuno deve essere rappresentativo di uno speciﬁco genere testuale 
     4. Devono essere salvati in un ﬁle ciascuno di testo semplice con codiﬁca UTF-8
 
 Programmi da sviluppare:
-Ciascuno dei due programmi deve anzituttoo leggere i ﬁle e analizzarne il contenuto
-linguisticamente almeno ﬁno al Part-of-Speech Tagging.
-    • Se si sceglie di sviluppare il codice come un ﬁle Python, il programma deve prendere in input
-        da riga di comando i ﬁle da analizzare.
-    • Se si sceglie di sviluppare il codice come Notebook, è accettabile che il/i ﬁle sia/siano
-        speciﬁcati all’interno del codice utilizzando un path relativo.
+Ciascuno dei due programmi deve anzituttoo leggere i ﬁle e analizzarne il contenuto linguisticamente almeno ﬁno al Part-of-Speech Tagging.
 
 Programma 1
 Il codice sviluppato deve prendere in input i due corpora, eﬀettuare le operazioni di annotazione
@@ -48,7 +37,7 @@ linguistica minime richieste (sentence spli.ng, tokenizzazione, PoS tagging) e l
 
 Programma 2
 Il codice sviluppato deve prendere in input un corpus, eﬀettuare le operazioni di annotazione
-richieste (sentence spli.ng, tokenizzazione, PoS tagging), ed estrarre le seguenE informazioni:
+richieste (sentence splitting, tokenizzazione, PoS tagging), ed estrarre le seguenE informazioni:
 
    1. I top-50 Sostantivi, Avverbi e Aggetivi più frequenti (con relativa frequenza, ordinati per
       frequenza decrescente);
@@ -81,33 +70,10 @@ richieste (sentence spli.ng, tokenizzazione, PoS tagging), ed estrarre le seguen
               frequenze (nel corpus) dei token della frase diviso il numero di token della frase
 
    6. Percentuale di Stopwords nel corpus rispetto al totale dei token
-         import nltk
-         from nltk.corpus import stopwords
-
-           nltk.download('stopwords')
-           print(stopwords.words('english'))
+         
    7. Frequenza di uso dei pronomi personali
          a. Numero di pronomi personali sul totale di token
          b. Numero medio di pronomi personali per frase
 
-   8. EstraGe le EnEtà Nominate del testo, identiﬁcare per ciascuna classe di NE i 15 elemenE più
-      frequenE, ordinati per frequenza decrescente e con relativa frequenza.
-
-
-
-
-Risultati attesi
-Perché il progetto sia considerato idoneo, devono essere consegnare all’interno di una cartella
-compressa:
-   1. I due corpora, come ﬁle di testo
-
-   2. I due programmi/notebook BEN COMMENTATI
-          • Nel caso si scelga di sviluppare programmi in Python (ﬁle .py), il risultato
-              dell’esecuzione deve essere scritto in un ﬁle di testo (ben formato) e consegnato.
-              Quindi, dovranno essere consegnati tre ﬁle di output: uno per il primo programma, e
-              due per il secondo.
-          • Nel caso si scelga di sviluppare il codice attraverso un Notebook, questo deve essere
-              consegnato eseguito. Per farlo, una volta eseguito il codice, è suﬃciente esportarlo
-              in formato .ipynb dal menù a tendina. Dovranno essere consegnati quindi 3
-              notebook: 1 per il primo programma, e 2 copie del notebook per il secondo
-              programma, ciascuna eseguita su un corpus diverso.
+   8. Estrarre le Entità Nominate del testo, identiﬁcare per ciascuna classe di NE i 15 elementi più
+      frequenti, ordinati per frequenza decrescente e con relativa frequenza.
