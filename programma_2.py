@@ -59,7 +59,6 @@ def distinzione_wordnet_pos(tag):  # Resituisce la casistica del tag analizzato:
 def lemmatizzazione(tokens):
     lemmatizer = WordNetLemmatizer()
     pos_tags = nltk.pos_tag(tokens)
-    # lemmi = [lemmatizer.lemmatize(token, distinzione_wordnet_pos(tag)) for token, tag in pos_tags]
     lemmi = []
 
     for token, tag in pos_tags:
