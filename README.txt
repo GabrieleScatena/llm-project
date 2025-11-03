@@ -1,79 +1,63 @@
-Realizzazione di due programmi scritti in Python che utilizzino i moduli di NLTK per analizzare linguisticamente due corpora di testo inglese, 
-confrontarli sulla base di alcuni indici statistici, ed estrarre da essi informazioni.
+This repository contains a Python application conceived as an LLM‑centric experiment in text understanding. The code analyses English corpora with a workflow that mirrors how a large language model reasons about language: it reads raw text, segments it into sentences and tokens, tags parts of speech, lemmatizes terms, estimates sentiment at sentence level, and surfaces statistically grounded signals such as bigram associations and named entities. The intent is to study how LLM‑style insights can be approximated or complemented with transparent, reproducible steps, while keeping the door open to plugging an actual LLM for higher‑level interpretation.
 
-Creazione dei corpora
-I due corpora devono essere creati rispondendo alle seguenti caratteristiche:
-    1. Devono essere in lingua inglese
-    2. Devono contenere almeno 5000 parole
-    3. Ciascuno deve essere rappresentativo di uno speciﬁco genere testuale 
-    4. Devono essere salvati in un ﬁle ciascuno di testo semplice con codiﬁca UTF-8
+The project ships with two independent programs. The first compares two corpora and produces a narrative report that synthesizes distributional properties, salient bigrams scored by mutual information and its local variant, Markov‑based plausibility of sentences, stopword coverage and pronoun usage, ending with a consolidated sentiment profile. The second digs into a single corpus to extract its lexical backbone: it lemmatizes and tags the stream, highlights the most characteristic nouns, adjectives and adverbs, and enumerates named entities by type to support stylistic and topical inspection. Both programs write their results to human‑readable text files so that analysis can be inspected, shared and versioned.
 
-Programmi da sviluppare:
-Ciascuno dei due programmi deve anzituttoo leggere i ﬁle e analizzarne il contenuto linguisticamente almeno ﬁno al Part-of-Speech Tagging.
+The repository includes example corpora that are long‑form political speeches saved in UTF‑8 and suitable for experimentation. The code does not hard‑wire assumptions about the domain and will operate on any sufficiently sized English text. By design, the workflow emphasizes clarity over cleverness: every step is explicit and auditable, echoing the goal of explaining how a model reaches its conclusions rather than treating the process as a black box.
 
-Programma 1
-Il codice sviluppato deve prendere in input i due corpora, eﬀettuare le operazioni di annotazione
-linguistica minime richieste (sentence spli.ng, tokenizzazione, PoS tagging) e la lemmatizzazione
-(utilizzando I PoS Tags), e produrre un confronto dei corpora rispetto a:
-     1. Numero di frasi e token;
-     2. Lunghezza media delle frasi in token e lunghezza media dei token, a eccezione della
-        punteggiatura, in caratteri;
-     3. Distribuzione delle PoS nei primi 1000 token
-             • Confrontare la distribuzione delle categorie grammaticali nei primi 1000 token di
-                ciascun corpus;
-     4. Dimensione del vocabolario e ricchezza lessicale (Type-Token Ratio, TTR), calcolata per
-        porzioni incrementali di 200 token ﬁno ad arrivare a tutto il testo
-             • i.e., i primi 200, i primi 400, i primi 600, ..., per tu. i token;
-     5. Numero di lemmi disEnE (i.e., la dimensione del vocabolario dei lemmi)
-     6. Numero medio di lemmi per frase.
-     7. Distribuzione delle frasi positive e negative
-             • Per classiﬁcare le frasi in POS e NEG è possibile utilizzare il classiﬁcatore di polarità
-                visto a lezione (Notebook) o un altro classiﬁcatore di Sentiment addestrato dallo
-              studente o pre-addestrato. Se il classiﬁcatore NON È addestrato dallo studente, deve
-              essere descritio;
-   8. Polarità del documento
-          • Utilizzare il classiﬁcatore del punto 7. per determinare la polarità complessiva del
-              corpus, sommando la polarità di tutte le frasi.
+## How to run
 
-Programma 2
-Il codice sviluppato deve prendere in input un corpus, eﬀettuare le operazioni di annotazione
-richieste (sentence splitting, tokenizzazione, PoS tagging), ed estrarre le seguenE informazioni:
+The application is plain Python and depends on NLTK only. A recent Python 3 interpreter is recommended. It is practical to create a virtual environment, install the single dependency, and download the required linguistic resources once before running the programs. The code contains commented instructions to let NLTK fetch its models; if a LookupError appears, simply download the listed resources and re‑run.
 
-   1. I top-50 Sostantivi, Avverbi e Aggetivi più frequenti (con relativa frequenza, ordinati per
-      frequenza decrescente);
+Create and activate an environment, install dependencies, and fetch the data. On Unix‑like systems:
 
-   2. I top-20 n-grammi più frequenti (con relativa frequenza, e ordinati per frequenza
-      decrescente)
-          • Per n = [1, 2, 3]
+```
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install nltk
+python - <<'PY'
+import nltk
+# Use the exact resource identifiers referenced in the source files.
+for pkg in [
+    "punkt_tab",
+    "averaged_perceptron_tagger_eng",
+    "wordnet",
+    "vader_lexicon",
+    # The following are commonly needed by named entity chunking and stopword utilities.
+    "maxent_ne_chunker_tab",
+    "words",
+    "stopwords",
+]:
+    try:
+        nltk.download(pkg)
+    except Exception as e:
+        print(f"Warning: could not download {pkg}: {e}")
+print("NLTK setup complete.")
+PY
+```
 
-   3. I top 20 n-grammi di PoS più frequenti (con relativa frequenza, e ordinati per frequenza
-      decrescente)
-          • Per n = [1, 2, 3, 4, 5]
+Run the comparative analysis on two corpora with the first program. It expects two UTF‑8 text files and writes a report named after the inputs. From the project root:
 
-   4. I top-10 bigrammi composti da Verbo e Sostantivo, ordinati per:
-          a. frequenza decrescente, con relativa frequenza
-          b. probabilità condizionata massima, e relativo valore di probabilità
-          c. probabilità congiunta massima, e relativo valore di probabilità
-          d. MI (Mutual Information) massima, e relativo valore di MI
-          e. LMI (Local Mutual Information) massima, e relativo valore di MI
-          f. Calcolare e stampare il numero di elementi comuni ai top-10 per MI e per LMI
+```
+python programma_1.py RobertKennedySpeech.txt TrumpSpeech.txt
+```
 
-   5. Considerate le frasi con una lunghezza compresa tra 10 e 20 token, in cui almeno la metà
-      (considerare la parte intera della divisione per due come valore) dei token occorre almeno 2
-      volte nel corpus (i.e., non è un hapax), si identiﬁchino:
-          a. La frase con la media della distribuzione di frequenza dei token più alta
-          b. La frase con la media della distribuzione di frequenza dei token più bassa
-          c. La frase con probabilità più alta secondo un modello di Markov di ordine 2 costruito
-             a partire dal corpus di input
+Run the single‑corpus analysis with the second program. It expects one UTF‑8 text file and produces a textual report with named entities and top lexical items:
 
-              NB: la media della distribuzione di frequenza dei token è data dalla somma delle
-              frequenze (nel corpus) dei token della frase diviso il numero di token della frase
+```
+python programma_2.py TrumpSpeech.txt
+```
 
-   6. Percentuale di Stopwords nel corpus rispetto al totale dei token
-         
-   7. Frequenza di uso dei pronomi personali
-         a. Numero di pronomi personali sul totale di token
-         b. Numero medio di pronomi personali per frase
+Output files are placed in the same directory and are named with a descriptive prefix, for example `programma1_RobertKennedySpeech.txt`, `programma1_TrumpSpeech.txt`, and `programma2_TrumpSpeech.txt`. These reports are designed to be read in a text editor and committed to version control alongside the source, so results can be reproduced across environments.
 
-   8. Estrarre le Entità Nominate del testo, identiﬁcare per ciascuna classe di NE i 15 elementi più
-      frequenti, ordinati per frequenza decrescente e con relativa frequenza.
+## Project structure
+
+The root contains the two entry points, the sample corpora, and a short Italian brief that documents the academic assignment the implementation follows. The logic is written in straightforward functions that can be imported in notebooks if an interactive exploration is preferred. No external services are required and the code runs fully offline once NLTK data have been downloaded.
+
+## What “LLM‑centric” means here
+
+Although the implementation relies on NLTK rather than on an API‑backed transformer, the analysis is framed through an LLM lens. The steps emulate how a large language model decomposes a prompt: tokenization and part‑of‑speech tagging expose grammatical roles, lemmatization abstracts surface variation, association measures approximate multi‑token dependencies, and sentence‑level polarity offers a compact affective prior. The outputs make the reasoning explicit and can be used as scaffolding to integrate an actual LLM for summarization, stylistic comparison or zero‑shot classification while keeping a transparent baseline as a reference.
+
+## Reproducibility notes
+
+Results depend on the versions of Python, NLTK and its resource packages. Pinning these in a requirements file or capturing them with an environment manager will keep analyses stable over time. The included corpora are plain text in UTF‑8; if you substitute your own documents, ensure they meet the same encoding and contain enough sentences for statistics to be meaningful.
